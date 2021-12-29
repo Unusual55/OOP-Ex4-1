@@ -8,6 +8,20 @@ public class Node implements AbstractNode {
     private int id = 0;
     private double value = 0.0;
     
+    public Node(int id, double value) {
+        this.id = id;
+        this.value = value;
+    }
+    
+    public Node(int id) {
+        this(id, 0.0);
+    }
+    
+    public Node(AbstractNode node) {
+        this(node.getID(), node.getValue());
+    }
+    
+    
     /**
      * @return The ID of the node.
      */
