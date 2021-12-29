@@ -1,6 +1,7 @@
 package datastructures;
 
 import api.AbstractNode;
+import org.json.JSONObject;
 
 import java.util.Objects;
 
@@ -8,15 +9,25 @@ public class Node implements AbstractNode {
     private int id = 0;
     private double value = 0.0;
     
+    /**
+     * @param id The ID of the node.
+     * @param value The value of the node.
+     */
     public Node(int id, double value) {
         this.id = id;
         this.value = value;
     }
     
+    /**
+     * @param id The ID of the node.
+     */
     public Node(int id) {
         this(id, 0.0);
     }
     
+    /**
+     * @param node The node to copy.
+     */
     public Node(AbstractNode node) {
         this(node.getID(), node.getValue());
     }
@@ -56,6 +67,16 @@ public class Node implements AbstractNode {
     public AbstractNode setValue(double value) {
         this.value = value;
         return this;
+    }
+    
+    /**
+     * @return JSONObject representation of the node.
+     */
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("id", this.id);
+        return json;
     }
     
     /**
@@ -104,7 +125,7 @@ public class Node implements AbstractNode {
     
     @Override
     public String toString() {
-        return "Node{" + "id=" + this.id + ", value=" + this.value + '}';
+        return '{' + "id=" + this.id + ", value=" + this.value + '}';
     }
     
     @Override
