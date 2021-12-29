@@ -6,8 +6,6 @@ import java.util.Random;
 
 public interface AbstractNode extends Comparable<AbstractNode> {
     
-    static Random rand = new Random();
-    
     /**
      * @return The ID of the node.
      */
