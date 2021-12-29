@@ -20,6 +20,7 @@ out
 *.nar
 *.ear
 *.zip
+# Authored by Ofri Tavor and Nir Sasson
 *.tar.gz
 *.rar
 
