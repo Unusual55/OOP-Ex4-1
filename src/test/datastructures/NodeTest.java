@@ -1,5 +1,6 @@
-package datastructures;
+package test.datastructures;
 
+import datastructures.Node;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
