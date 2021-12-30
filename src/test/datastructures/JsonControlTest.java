@@ -1,4 +1,4 @@
-package test;
+package test.datastructures;
 
 import datastructures.JsonControl;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;

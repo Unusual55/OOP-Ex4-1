@@ -1,16 +1,6 @@
 package datastructures;
-
-import org.jgrapht.Graph;
-import org.jgrapht.alg.interfaces.ManyToManyShortestPathsAlgorithm;
-import org.jgrapht.alg.shortestpath.DijkstraManyToManyShortestPaths;
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
-
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 
 public class DWGraph{
     public SimpleDirectedWeightedGraph<Integer, Edge> graph;
@@ -57,9 +47,20 @@ public class DWGraph{
         return true;
     }
 
+    public boolean removeNode(int key){
+        if(!this.nodes.containsKey(key)){
+            return false;
+        }
+        this.nodes.remove(key);
+        this.graph.removeVertex(key);
+        return true;
+    }
 
-
-
-
-
+    public boolean removeEdge(int src, int dest){
+        if(!nodes.containsKey(src)||!nodes.containsKey(dest)||!graph.containsEdge(src, dest)){
+            return false;
+        }
+        graph.removeEdge(src, dest);
+        return true;
+    }
 }

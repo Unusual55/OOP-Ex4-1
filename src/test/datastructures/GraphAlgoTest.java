@@ -1,4 +1,4 @@
-package test;
+package test.datastructures;
 
 import datastructures.DijkstreeData;
 import datastructures.GraphAlgo;
