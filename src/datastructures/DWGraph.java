@@ -1,6 +1,8 @@
 package datastructures;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
+
 import java.util.HashMap;
+import java.util.Set;
 
 public class DWGraph{
     public SimpleDirectedWeightedGraph<Integer, Edge> graph;
@@ -62,5 +64,13 @@ public class DWGraph{
         }
         graph.removeEdge(src, dest);
         return true;
+    }
+
+    /**
+     * This function returns a HashSet which contain all of the Edges in the graph
+     * @return Set of Edges
+     */
+    public Set<Edge> getAllEdges(){
+        return this.graph.edgeSet();
     }
 }
