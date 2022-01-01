@@ -27,6 +27,13 @@ public class StudentCode2 {
         final JSONArray nodesArray = graphJOBJ.getJSONArray("Nodes");
 //        System.out.println(nodesArray.length());
         
+        String clientInfo = client.getInfo();
+        final JSONObject infoJson = new JSONObject(clientInfo);
+        final JSONObject GameServer = infoJson.getJSONObject("GameServer");
+        final int pokemonsAmount = GameServer.getInt("pokemons");
+        final int agentsAmount = GameServer.getInt("agents");
+        
+        
         client.addAgent("{\"id\":0}");
         String agentsStr = client.getAgents();
 //        System.out.println(agentsStr);

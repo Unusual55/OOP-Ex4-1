@@ -2,8 +2,6 @@ package api;
 
 import org.json.JSONObject;
 
-import java.util.Random;
-
 public interface AbstractNode extends Comparable<AbstractNode> {
     
     /**

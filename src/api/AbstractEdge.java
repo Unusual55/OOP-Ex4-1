@@ -2,7 +2,7 @@ package api;
 
 import org.json.JSONObject;
 
-public interface AbstractEdge extends Comparable<AbstractEdge> {
+public interface AbstractEdge {
     /**
      * @return The id of the source node.
      */
@@ -17,6 +17,12 @@ public interface AbstractEdge extends Comparable<AbstractEdge> {
      * @return The id of the destination node.
      */
     public int getDestination();
+    
+    /**
+     * @return The type of the edge. (if source > destination then type = -1 else type = 1)
+     */
+    public int getType();
+    
     
     /**
      * @param source The id of the source node.
