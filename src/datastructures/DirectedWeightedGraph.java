@@ -554,4 +554,22 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
     public int getEdgeCount() {
         return this.edgeCounter;
     }
+    
+    @Override
+    public String toString() {
+        return this.toJSON().toString(4);
+    }
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DirectedWeightedGraph)) return false;
+        DirectedWeightedGraph that = (DirectedWeightedGraph) o;
+        return this.nodes.equals(that.nodes) && this.outEdges.equals(that.outEdges) && this.inEdges.equals(that.inEdges);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.nodes, this.outEdges, this.inEdges);
+    }
 }
