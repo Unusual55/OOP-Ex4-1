@@ -396,8 +396,7 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
                 if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
                     throw new ConcurrentModificationException();
                 }
-                this.next = this.iterator.next();
-                return this.next;
+                return this.next = this.iterator.next();
             }
             
             @Override
@@ -419,7 +418,7 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
      */
     @Override
     public int getModCounter() {
-        return 0;
+        return this.modificationCounter;
     }
     
     /**
@@ -427,7 +426,47 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
      */
     @Override
     public Iterator<AbstractNode> getNodes() {
-        return null;
+        return new Iterator<AbstractNode>() {
+            private int modCount = DirectedWeightedGraph.this.modificationCounter;
+            private final Iterator<AbstractNode> iterator = DirectedWeightedGraph.this.nodes.values().iterator();
+            private AbstractNode next = null;
+            
+            @Override
+            public boolean hasNext() {
+                if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
+                    throw new ConcurrentModificationException();
+                }
+                return this.iterator.hasNext();
+            }
+            
+            @Override
+            public AbstractNode next() {
+                if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
+                    throw new ConcurrentModificationException();
+                }
+                return this.next = this.iterator.next();
+            }
+            
+            @Override
+            public void remove() {
+                if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
+                    throw new ConcurrentModificationException();
+                }
+                if (this.next == null) {
+                    throw new IllegalStateException();
+                }
+                DirectedWeightedGraph.this.removeNode(this.next.getID());
+                this.modCount = DirectedWeightedGraph.this.modificationCounter;
+            }
+            
+            @Override
+            public void forEachRemaining(Consumer<? super AbstractNode> action) {
+                if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
+                    throw new ConcurrentModificationException();
+                }
+                Iterator.super.forEachRemaining(action);
+            }
+        };
     }
     
     /**
@@ -435,33 +474,77 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
      */
     @Override
     public Iterator<AbstractEdge> getEdges() {
-        return null;
+        return new Iterator<AbstractEdge>() {
+            private int modCount = DirectedWeightedGraph.this.modificationCounter;
+            private final Iterator<HashMap<Integer, AbstractEdge>> outerIter = DirectedWeightedGraph.this.outEdges.values().iterator();
+            private Iterator<AbstractEdge> innerIter = null;
+            private AbstractEdge next = null;
+            
+            @Override
+            public boolean hasNext() {
+                if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
+                    throw new ConcurrentModificationException();
+                }
+                if (this.innerIter == null) return this.outerIter.hasNext();
+                return this.outerIter.hasNext() || this.innerIter.hasNext();
+            }
+            
+            @Override
+            public AbstractEdge next() {
+                if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
+                    throw new ConcurrentModificationException();
+                }
+                if (this.innerIter == null || !this.innerIter.hasNext()) {
+                    this.innerIter = this.outerIter.next().values().iterator();
+                }
+                return this.next = this.innerIter.next();
+            }
+            
+            @Override
+            public void remove() {
+                if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
+                    throw new ConcurrentModificationException();
+                }
+                if (this.next == null) {
+                    throw new IllegalStateException();
+                }
+                DirectedWeightedGraph.this.removeEdge(this.next.getSource(), this.next.getDestination());
+                this.modCount = DirectedWeightedGraph.this.modificationCounter;
+            }
+            
+            @Override
+            public void forEachRemaining(Consumer<? super AbstractEdge> action) {
+                if (this.modCount != DirectedWeightedGraph.this.modificationCounter) {
+                    throw new ConcurrentModificationException();
+                }
+                Iterator.super.forEachRemaining(action);
+            }
+        };
     }
     
     /**
-     * @param node The node.
-     * @return The in-degree of the node, or -1 if the node does not exist. (The in-degree of a node is the number of edges that have the node as their destination.)
+     * @param node The id of the node
+     * @return The in-degree of the node, or 0 if the node does not exist. (The in-degree of a node is the number of edges that have the node as their destination.)
      */
-    @Override
-    public int inDegree(AbstractNode node) {
-        return 0;
+    public int inDegree(int node) {
+        return this.inEdges.getOrDefault(node, new HashSet<>()).size();
     }
     
     /**
-     * @param node The node.
-     * @return The out-degree of the node, or -1 if the node does not exist. (The out-degree of a node is the number of edges that have the node as their source.)
+     * @param node The id of the node
+     * @return The out-degree of the node, or 0 if the node does not exist. (The out-degree of a node is the number of edges that have the node as their source.)
      */
-    @Override
-    public int outDegree(AbstractNode node) {
-        return 0;
+    public int outDegree(int node) {
+        return this.outEdges.getOrDefault(node, new HashMap<>()).size();
     }
+    
     
     /**
      * @return The number of nodes in the graph.
      */
     @Override
     public int getNodeCount() {
-        return 0;
+        return this.nodes.size();
     }
     
     /**
@@ -469,6 +552,6 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
      */
     @Override
     public int getEdgeCount() {
-        return 0;
+        return this.edgeCounter;
     }
 }

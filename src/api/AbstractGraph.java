@@ -89,13 +89,13 @@ public interface AbstractGraph {
     
     /**
      * @param node The node.
-     * @return The in-degree of the node, or -1 if the node does not exist. (The in-degree of a node is the number of edges that have the node as their destination.)
+     * @return The in-degree of the node, or 0 if the node does not exist. (The in-degree of a node is the number of edges that have the node as their destination.)
      */
     public int inDegree(AbstractNode node);
     
     /**
      * @param node The node.
-     * @return The out-degree of the node, or -1 if the node does not exist. (The out-degree of a node is the number of edges that have the node as their source.)
+     * @return The out-degree of the node, or 0 if the node does not exist. (The out-degree of a node is the number of edges that have the node as their source.)
      */
     public int outDegree(AbstractNode node);
     

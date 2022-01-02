@@ -181,4 +181,31 @@ public interface AbstractDirectedWeightedGraph extends AbstractGraph {
         return this.getOutEdges(node.getID());
     }
     
+    /**
+     * @param node The id of the node
+     * @return The in-degree of the node, or 0 if the node does not exist. (The in-degree of a node is the number of edges that have the node as their destination.)
+     */
+    public int inDegree(int node);
+    
+    /**
+     * @param node The node.
+     * @return The in-degree of the node, or 0 if the node does not exist. (The in-degree of a node is the number of edges that have the node as their destination.)
+     */
+    default int inDegree(AbstractNode node) {
+        return this.inDegree(node.getID());
+    }
+    
+    /**
+     * @param node The id of the node
+     * @return The out-degree of the node, or 0 if the node does not exist. (The out-degree of a node is the number of edges that have the node as their source.)
+     */
+    public int outDegree(int node);
+    
+    /**
+     * @param node The node.
+     * @return The out-degree of the node, or 0 if the node does not exist. (The out-degree of a node is the number of edges that have the node as their source.)
+     */
+    default int outDegree(AbstractNode node) {
+        return this.outDegree(node.getID());
+    }
 }
