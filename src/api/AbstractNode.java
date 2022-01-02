@@ -29,5 +29,7 @@ public interface AbstractNode extends Comparable<AbstractNode> {
     /**
      * @return JSONObject representation of the node.
      */
-    public JSONObject toJSON();
+    default JSONObject toJSON() {
+        return new JSONObject().put("id", this.getID());
+    }
 }

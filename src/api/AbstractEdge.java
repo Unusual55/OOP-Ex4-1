@@ -42,8 +42,13 @@ public interface AbstractEdge {
      */
     public AbstractEdge setDestination(int destination);
     
-    /**
-     * @return JSONObject representation of the node.
-     */
-    public JSONObject toJSON();
+    //    /**
+//     * @return JSONObject representation of the node.
+//     */
+    default JSONObject toJSON() {
+        return new JSONObject()
+                .put("src", this.getSource())
+                .put("w", this.getWeight())
+                .put("dest", this.getDestination());
+    }
 }

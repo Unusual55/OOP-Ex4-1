@@ -275,9 +275,7 @@ public class Vertex extends Node implements AbstractNode {
     }
     
     public JSONObject toJSON() {
-        JSONObject json = super.toJSON();
-        json.put("pos", this.getXYZString());
-        return json;
+        return super.toJSON().put("pos", this.getXYZString());
     }
     
     @Override

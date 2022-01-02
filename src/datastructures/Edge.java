@@ -103,18 +103,6 @@ public class Edge implements AbstractEdge {
         return this;
     }
     
-    /**
-     * @return JSONObject representation of the node.
-     */
-    @Override
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("src", this.source);
-        json.put("w", this.weight);
-        json.put("dest", this.destination);
-        return null;
-    }
-    
     @Override
     public String toString() {
         return '{' + "src=" + this.source + ", w=" + this.weight + ", dest=" + this.destination + '}';

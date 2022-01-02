@@ -69,15 +69,6 @@ public class Node implements AbstractNode {
         return this;
     }
     
-    /**
-     * @return JSONObject representation of the node.
-     */
-    @Override
-    public JSONObject toJSON() {
-        JSONObject json = new JSONObject();
-        json.put("id", this.id);
-        return json;
-    }
     
     /**
      * Compares this object with the specified object for order.  Returns a
