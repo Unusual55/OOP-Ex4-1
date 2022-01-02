@@ -3,7 +3,6 @@ package datastructures;
 import api.AbstractDirectedWeightedGraph;
 import api.AbstractEdge;
 import api.AbstractNode;
-import utils.Utils;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -139,6 +138,10 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
     @Override
     public boolean addEdge(int source, int destination, double weight) {
         if (this.hasNode(source) && this.hasNode(destination)) {
+            if (this.hasEdge(source, destination)) {
+                return false;
+            }
+            
             AbstractEdge edge = new Edge(source, destination, weight);
             if (!this.outEdges.containsKey(source)) {
                 this.outEdges.put(source, new HashMap<>());
@@ -193,22 +196,24 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
             return false;
         }
         AbstractNode removed = this.nodes.remove(node);
-        for (int inEdge : Utils.emptyIfNull(this.inEdges.get(node))) {
+        HashSet<Integer> inEdges = this.inEdges.getOrDefault(node, new HashSet<>());
+        for (int inEdge : inEdges) {
             this.outEdges.get(inEdge).remove(node);
             if (this.outEdges.get(inEdge).isEmpty()) {
                 this.outEdges.remove(inEdge);
             }
         }
-        this.edgeCounter -= this.inEdges.getOrDefault(node, new HashSet<>()).size();
+        this.edgeCounter -= inEdges.size();
         this.inEdges.remove(node);
         
-        for (AbstractEdge outEdge : Utils.emptyIfNull(this.outEdges.get(node).values())) {
+        HashMap<Integer, AbstractEdge> outEdges = this.outEdges.getOrDefault(node, new HashMap<>());
+        for (AbstractEdge outEdge : outEdges.values()) {
             this.inEdges.get(outEdge.getDestination()).remove(node);
             if (this.inEdges.get(outEdge.getDestination()).isEmpty()) {
                 this.inEdges.remove(outEdge.getDestination());
             }
         }
-        this.edgeCounter -= this.outEdges.getOrDefault(node, new HashMap<>()).size();
+        this.edgeCounter -= outEdges.size();
         this.outEdges.remove(node);
         
         this.modificationCounter++;
@@ -272,7 +277,7 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
         }
         return new Iterator<AbstractNode>() {
             private int modCount = DirectedWeightedGraph.this.modificationCounter;
-            private final Iterator<AbstractEdge> iterator = Utils.emptyIfNull(DirectedWeightedGraph.this.outEdges.get(node).values()).iterator();
+            private final Iterator<AbstractEdge> iterator = DirectedWeightedGraph.this.outEdges.getOrDefault(node, new HashMap<>()).values().iterator();
             private AbstractEdge next = null;
             
             @Override
@@ -324,10 +329,9 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
         if (!this.hasNode(node)) {
             return null;
         }
-//        return this.inEdges.get(node).values().iterator();
         return new Iterator<AbstractEdge>() {
             private int modCount = DirectedWeightedGraph.this.modificationCounter;
-            private final Iterator<Integer> iterator = Utils.emptyIfNull(DirectedWeightedGraph.this.inEdges.get(node)).iterator();
+            private final Iterator<Integer> iterator = DirectedWeightedGraph.this.inEdges.getOrDefault(node, new HashSet<>()).iterator();
             private Integer next = null;
             
             @Override
@@ -380,7 +384,7 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
         }
         return new Iterator<AbstractEdge>() {
             private int modCount = DirectedWeightedGraph.this.modificationCounter;
-            private final Iterator<AbstractEdge> iterator = Utils.emptyIfNull(DirectedWeightedGraph.this.outEdges.get(node).values()).iterator();
+            private final Iterator<AbstractEdge> iterator = DirectedWeightedGraph.this.outEdges.getOrDefault(node, new HashMap<>()).values().iterator();
             private AbstractEdge next = null;
             
             @Override
@@ -564,7 +568,7 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DirectedWeightedGraph)) return false;
-        DirectedWeightedGraph that = (DirectedWeightedGraph) o;
+        DirectedWeightedGraph that = (DirectedWeightedGraph)o;
         return this.nodes.equals(that.nodes) && this.outEdges.equals(that.outEdges) && this.inEdges.equals(that.inEdges);
     }
     

@@ -19,9 +19,11 @@ public interface AbstractEdge {
     public int getDestination();
     
     /**
-     * @return The type of the edge. (if source > destination then type = -1 else type = 1)
+     * @return The type of the edge. (src < dest => type > 0, src > dest => type < 0)
      */
-    public int getType();
+    default int getType() {
+        return this.getSource() > this.getDestination() ? -1 : 1;
+    }
     
     
     /**
