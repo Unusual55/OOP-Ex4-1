@@ -4,6 +4,7 @@ import datastructures.Node;
 import jdk.jshell.execution.Util;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 import java.util.function.Function;
 
@@ -15,6 +16,10 @@ public class Utils {
     
     public static void main(String[] args) {
         System.out.println(Arrays.toString(randomArray(0d, 10d, 10)));
+    }
+    
+    public static <T> Iterable<T> emptyIfNull(Iterable<T> iterable) {
+        return iterable == null ? Collections.<T>emptyList() : iterable;
     }
     
     public static <T> T randomElement(T[] array) {
