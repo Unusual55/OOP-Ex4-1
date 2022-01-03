@@ -1,10 +1,13 @@
 package datastructures;
 
+import api.AbstractNode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import utils.Utils;
+
+import java.util.Iterator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -220,18 +223,18 @@ class DirectedWeightedGraphTest {
     }
     
     @Test
-    void removeNODE() {
+    void deleteNode() {
         assertEquals(6, this.graph1.getNodeCount());
         assertEquals(11, this.graph1.getEdgeCount());
-        this.graph1.removeNODE('A').removeNODE('B');
+        this.graph1.deleteNode('A').deleteNode('B');
         assertEquals(4, this.graph1.getNodeCount());
         assertEquals(5, this.graph1.getEdgeCount());
         assertTrue(!this.graph1.hasNode('A') && !this.graph1.hasNode('B'));
-        this.graph1.removeNODE('C').removeNODE('D');
+        this.graph1.deleteNode('C').deleteNode('D');
         assertEquals(2, this.graph1.getNodeCount());
         assertEquals(1, this.graph1.getEdgeCount());
         assertTrue(!this.graph1.hasNode('C') && !this.graph1.hasNode('D'));
-        this.graph1.removeNODE('E').removeNODE('F');
+        this.graph1.deleteNode('E').deleteNode('F');
         assertEquals(0, this.graph1.getNodeCount());
         assertEquals(0, this.graph1.getEdgeCount());
         assertTrue(!this.graph1.hasNode('E') && !this.graph1.hasNode('F'));
@@ -240,36 +243,94 @@ class DirectedWeightedGraphTest {
     @Test
     void removeEdge() {
         assertEquals(11, this.graph1.getEdgeCount());
-        assertTrue(this.graph1.removeEdge('A', 'C'));
-        assertEquals(10, this.graph1.getEdgeCount());
-        assertTrue(this.graph1.removeEdge('A', 'D'));
-        assertEquals(9, this.graph1.getEdgeCount());
+        assertFalse(this.graph1.removeEdge('A', 'C'));
+        assertFalse(this.graph1.removeEdge('A', 'Z'));
+        assertFalse(this.graph1.removeEdge('B', 'E'));
+        assertEquals(11, this.graph1.getEdgeCount());
+        assertEquals(11, this.graph1.getEdgeCount());
         assertTrue(this.graph1.removeEdge('A', 'E'));
+        assertEquals(10, this.graph1.getEdgeCount());
+        assertTrue(this.graph1.removeEdge('A', 'F'));
+        assertEquals(9, this.graph1.getEdgeCount());
+        assertTrue(this.graph1.removeEdge('B', 'A'));
         assertEquals(8, this.graph1.getEdgeCount());
         assertTrue(this.graph1.removeEdge('B', 'C'));
         assertEquals(7, this.graph1.getEdgeCount());
         assertTrue(this.graph1.removeEdge('B', 'D'));
         assertEquals(6, this.graph1.getEdgeCount());
-        assertTrue(this.graph1.removeEdge('B', 'E'));
-        assertEquals(5, this.graph1.getEdgeCount());
         assertTrue(this.graph1.removeEdge('C', 'D'));
-        assertEquals(4, this.graph1.getEdgeCount());
+        assertEquals(5, this.graph1.getEdgeCount());
         assertTrue(this.graph1.removeEdge('C', 'E'));
-        assertEquals(3, this.graph1.getEdgeCount());
+        assertEquals(4, this.graph1.getEdgeCount());
         assertTrue(this.graph1.removeEdge('D', 'E'));
+        assertEquals(3, this.graph1.getEdgeCount());
+        assertTrue(this.graph1.removeEdge('E', 'A'));
         assertEquals(2, this.graph1.getEdgeCount());
-        assertTrue(this.graph1.removeEdge('F', 'A'));
+        assertTrue(this.graph1.removeEdge('E', 'F'));
         assertEquals(1, this.graph1.getEdgeCount());
-        assertTrue(this.graph1.removeEdge('F', 'B'));
+        assertTrue(this.graph1.removeEdge('F', 'D'));
         assertEquals(0, this.graph1.getEdgeCount());
     }
     
     @Test
-    void removeEDGE() {
+    void disconnect() {
+        assertEquals(11, this.graph1.getEdgeCount());
+        this.graph1.disconnect('A', 'C').disconnect('A', 'Z').disconnect('B', 'E');
+        assertEquals(11, this.graph1.getEdgeCount());
+        
+        assertEquals(11, this.graph1.getEdgeCount());
+        this.graph1.disconnect('A', 'E').disconnect('A', 'F');
+        assertEquals(9, this.graph1.getEdgeCount());
+        this.graph1.disconnect('B', 'A').disconnect('B', 'C');
+        assertEquals(7, this.graph1.getEdgeCount());
+        this.graph1.disconnect('B', 'D').disconnect('C', 'D');
+        assertEquals(5, this.graph1.getEdgeCount());
+        this.graph1.disconnect('C', 'E').disconnect('D', 'E');
+        assertEquals(3, this.graph1.getEdgeCount());
+        this.graph1.disconnect('E', 'A').disconnect('E', 'F');
+        assertEquals(1, this.graph1.getEdgeCount());
+        this.graph1.disconnect('F', 'D');
+        assertEquals(0, this.graph1.getEdgeCount());
     }
     
     @Test
     void getAdjacentNodes() {
+        Iterator<AbstractNode> adjIt = this.graph1.getAdjacentNodes('A');
+        StringBuilder adjNodes = new StringBuilder();
+        while (adjIt.hasNext()) {
+            adjNodes.append((char)adjIt.next().getID());
+        }
+        assertEquals("EF", adjNodes.toString());
+        adjIt = this.graph1.getAdjacentNodes('B');
+        adjNodes = new StringBuilder();
+        while (adjIt.hasNext()) {
+            adjNodes.append((char)adjIt.next().getID());
+        }
+        assertEquals("ACD", adjNodes.toString());
+        adjIt = this.graph1.getAdjacentNodes('C');
+        adjNodes = new StringBuilder();
+        while (adjIt.hasNext()) {
+            adjNodes.append((char)adjIt.next().getID());
+        }
+        assertEquals("DE", adjNodes.toString());
+        adjIt = this.graph1.getAdjacentNodes('D');
+        adjNodes = new StringBuilder();
+        while (adjIt.hasNext()) {
+            adjNodes.append((char)adjIt.next().getID());
+        }
+        assertEquals("E", adjNodes.toString());
+        adjIt = this.graph1.getAdjacentNodes('E');
+        adjNodes = new StringBuilder();
+        while (adjIt.hasNext()) {
+            adjNodes.append((char)adjIt.next().getID());
+        }
+        assertEquals("AF", adjNodes.toString());
+        adjIt = this.graph1.getAdjacentNodes('F');
+        adjNodes = new StringBuilder();
+        while (adjIt.hasNext()) {
+            adjNodes.append((char)adjIt.next().getID());
+        }
+        assertEquals("D", adjNodes.toString());
     }
     
     @Test
