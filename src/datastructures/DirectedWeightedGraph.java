@@ -51,187 +51,6 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
     
     
     /**
-     * @param node The id of the node.
-     * @return If the node exists in the graph.
-     */
-    @Override
-    public boolean hasNode(int node) {
-        return this.nodes.containsKey(node);
-    }
-    
-    /**
-     * @param source      The id of the source node.
-     * @param destination The id of the destination node.
-     * @return If the edge exists in the graph.
-     */
-    @Override
-    public boolean hasEdge(int source, int destination) {
-        return this.outEdges.containsKey(source) && this.outEdges.get(source).containsKey(destination);
-    }
-    
-    /**
-     * @param node The id of the node.
-     * @return The node with the given id.
-     */
-    @Override
-    public AbstractNode getNode(int node) {
-        return this.nodes.get(node);
-    }
-    
-    /**
-     * @param source      The id of the source node.
-     * @param destination The id of the destination node.
-     * @return The edge with the given source and destination.
-     */
-    @Override
-    public AbstractEdge getEdge(int source, int destination) {
-        if (this.hasEdge(source, destination)) {
-            return this.outEdges.get(source).get(destination);
-        }
-        return null;
-    }
-    
-    /**
-     * @param id    The id of the node to add.
-     * @param value The value of the node to add.
-     * @return True if the node was added, false otherwise (If the node already exists).
-     */
-    @Override
-    public boolean addNode(int id, double value) {
-        if (this.hasNode(id)) {
-            return false;
-        }
-        this.nodes.put(id, new Node(id, value));
-        this.modificationCounter++;
-        return true;
-    }
-    
-    /**
-     * For node addition chaining
-     *
-     * @param id    The id of the new node
-     * @param value The value of the new node
-     * @return The graph instance
-     */
-    public DirectedWeightedGraph addNODE(int id, double value) {
-        this.addNode(id, value);
-        return this;
-    }
-    
-    /**
-     * For node addition chaining
-     *
-     * @param id The id of the new node
-     * @return The graph instance
-     */
-    public DirectedWeightedGraph addNODE(int id) {
-        this.addNode(id);
-        return this;
-    }
-    
-    /**
-     * @param source      The id of the source node.
-     * @param destination The id of the destination node.
-     * @param weight      The weight of the edge to add.
-     * @return True if the edge was added, false otherwise
-     */
-    @Override
-    public boolean addEdge(int source, int destination, double weight) {
-        if (this.hasNode(source) && this.hasNode(destination)) {
-            if (this.hasEdge(source, destination)) {
-                return false;
-            }
-            
-            AbstractEdge edge = new Edge(source, destination, weight);
-            if (!this.outEdges.containsKey(source)) {
-                this.outEdges.put(source, new HashMap<>());
-            }
-            if (!this.inEdges.containsKey(destination)) {
-                this.inEdges.put(destination, new HashSet<>());
-            }
-            
-            this.outEdges.get(source).put(destination, edge);
-            if (this.inEdges.get(destination).add(source)) {
-                this.edgeCounter++;
-            }
-            
-            this.modificationCounter++;
-            return true;
-        }
-        return false;
-    }
-    
-    /**
-     * For edge addition chaining
-     *
-     * @param source      The id of the source node.
-     * @param destination The id of the destination node.
-     * @param weight      The weight of the edge to add.
-     * @return The graph instance
-     */
-    public DirectedWeightedGraph addEDGE(int source, int destination, double weight) {
-        this.addEdge(source, destination, weight);
-        return this;
-    }
-    
-    /**
-     * For edge addition chaining
-     *
-     * @param source      The id of the source node.
-     * @param destination The id of the destination node.
-     * @return The graph instance
-     */
-    public DirectedWeightedGraph addEDGE(int source, int destination) {
-        this.addEdge(source, destination);
-        return this;
-    }
-    
-    /**
-     * @param node The id of the node to remove.
-     * @return True if the node was removed, false otherwise (If the node does not exist).
-     */
-    @Override
-    public boolean removeNode(int node) {
-        if (!this.hasNode(node)) {
-            return false;
-        }
-        AbstractNode removed = this.nodes.remove(node);
-        HashSet<Integer> inEdges = this.inEdges.getOrDefault(node, new HashSet<>());
-        for (int inEdge : inEdges) {
-            this.outEdges.get(inEdge).remove(node);
-            if (this.outEdges.get(inEdge).isEmpty()) {
-                this.outEdges.remove(inEdge);
-            }
-        }
-        this.edgeCounter -= inEdges.size();
-        this.inEdges.remove(node);
-        
-        HashMap<Integer, AbstractEdge> outEdges = this.outEdges.getOrDefault(node, new HashMap<>());
-        for (AbstractEdge outEdge : outEdges.values()) {
-            this.inEdges.get(outEdge.getDestination()).remove(node);
-            if (this.inEdges.get(outEdge.getDestination()).isEmpty()) {
-                this.inEdges.remove(outEdge.getDestination());
-            }
-        }
-        this.edgeCounter -= outEdges.size();
-        this.outEdges.remove(node);
-        
-        this.modificationCounter++;
-        return true;
-    }
-    
-    /**
-     * For node removal chaining
-     *
-     * @param node The id of the node to remove.
-     * @return The graph instance
-     */
-    public DirectedWeightedGraph removeNODE(int node) {
-        this.removeNode(node);
-        return this;
-    }
-    
-    /**
      * @param source      The id of the source node.
      * @param destination The id of the destination node.
      * @return True if the edge was removed, false otherwise (If the edge does not exist).
@@ -426,6 +245,161 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
     }
     
     /**
+     * @param node The node to check.
+     * @return If the node is in the graph.
+     */
+    @Override
+    public boolean hasNode(AbstractNode node) {
+        return this.nodes.containsKey(node.getID());
+    }
+    
+    /**
+     * @param edge The edge to check.
+     * @return If the edge is in the graph.
+     */
+    @Override
+    public boolean hasEdge(AbstractEdge edge) {
+        return this.outEdges.containsKey(edge.getSource()) && this.outEdges.get(edge.getSource()).containsKey(edge.getDestination());
+    }
+    
+    /**
+     * @param node The node to get.
+     * @return The node instance. Null if the node does not exist in the graph.
+     */
+    @Override
+    public AbstractNode getNode(AbstractNode node) {
+        return this.nodes.get(node.getID());
+    }
+    
+    /**
+     * @param edge The edge to get.
+     * @return The edge instance. Null if the edge does not exist in the graph.
+     */
+    @Override
+    public AbstractEdge getEdge(AbstractEdge edge) {
+        if (this.hasEdge(edge)) {
+            return this.outEdges.get(edge.getSource()).get(edge.getDestination());
+        }
+        return null;
+    }
+    
+    /**
+     * @param node The node to add.
+     * @return True if the node was added, false otherwise (If the node already exists).
+     */
+    @Override
+    public boolean addNode(AbstractNode node) {
+        if (this.hasNode(node)) {
+            return false;
+        }
+        this.nodes.put(node.getID(), node);
+        this.modificationCounter++;
+        return true;
+    }
+    
+    /**
+     * @param edge The edge to add.
+     * @return True if the edge was added, false otherwise (If the edge already exists).
+     */
+    @Override
+    public boolean addEdge(AbstractEdge edge) {
+        int source = edge.getSource();
+        int destination = edge.getDestination();
+        if (this.hasNode(source) && this.hasNode(destination)) {
+            if (this.hasEdge(edge)) {
+                return false;
+            }
+            
+            if (!this.outEdges.containsKey(source)) {
+                this.outEdges.put(source, new HashMap<>());
+            }
+            if (!this.inEdges.containsKey(destination)) {
+                this.inEdges.put(destination, new HashSet<>());
+            }
+            
+            this.outEdges.get(source).put(destination, edge);
+            if (this.inEdges.get(destination).add(source)) {
+                this.edgeCounter++;
+            }
+            
+            this.modificationCounter++;
+            return true;
+        }
+        return false;
+    }
+    
+    /**
+     * @param node The node to remove.
+     * @return True if the node was removed, false otherwise (If the node does not exist).
+     */
+    @Override
+    public boolean removeNode(AbstractNode node) {
+        if (!this.hasNode(node)) {
+            return false;
+        }
+        int ID = node.getID();
+        AbstractNode removed = this.nodes.remove(ID);
+        HashSet<Integer> inEdges = this.inEdges.getOrDefault(ID, new HashSet<>());
+        for (int inEdge : inEdges) {
+            this.outEdges.get(inEdge).remove(ID);
+            if (this.outEdges.get(inEdge).isEmpty()) {
+                this.outEdges.remove(inEdge);
+            }
+        }
+        this.edgeCounter -= inEdges.size();
+        this.inEdges.remove(ID);
+        
+        HashMap<Integer, AbstractEdge> outEdges = this.outEdges.getOrDefault(ID, new HashMap<>());
+        for (AbstractEdge outEdge : outEdges.values()) {
+            this.inEdges.get(outEdge.getDestination()).remove(ID);
+            if (this.inEdges.get(outEdge.getDestination()).isEmpty()) {
+                this.inEdges.remove(outEdge.getDestination());
+            }
+        }
+        this.edgeCounter -= outEdges.size();
+        this.outEdges.remove(ID);
+        
+        this.modificationCounter++;
+        return true;
+    }
+    
+    /**
+     * @param node The node to remove
+     * @return The graph instance
+     */
+    @Override
+    public AbstractDirectedWeightedGraph deleteNode(AbstractNode node) {
+        return null;
+    }
+    
+    /**
+     * @param edge The edge to remove.
+     * @return True if the edge was removed, false otherwise (If the edge does not exist).
+     */
+    @Override
+    public boolean removeEdge(AbstractEdge edge) {
+        return false;
+    }
+    
+    /**
+     * @param edge The edge to remove
+     * @return The graph instance
+     */
+    @Override
+    public AbstractDirectedWeightedGraph disconnect(AbstractEdge edge) {
+        return null;
+    }
+    
+    /**
+     * @param node The node.
+     * @return An iterator over the neighbors of the node, or null if the node does not exist.
+     */
+    @Override
+    public Iterator<AbstractNode> getAdjacentNodes(AbstractNode node) {
+        return null;
+    }
+    
+    /**
      * @return An iterator over the nodes in the graph.
      */
     @Override
@@ -524,6 +498,42 @@ public class DirectedWeightedGraph implements AbstractDirectedWeightedGraph {
                 Iterator.super.forEachRemaining(action);
             }
         };
+    }
+    
+    /**
+     * @param node The node.
+     * @return An iterator over the in-edges of the node, or null if the node does not exist.
+     */
+    @Override
+    public Iterator<AbstractEdge> getInEdges(AbstractNode node) {
+        return null;
+    }
+    
+    /**
+     * @param node The node.
+     * @return An iterator over the out-edges of the node, or null if the node does not exist.
+     */
+    @Override
+    public Iterator<AbstractEdge> getOutEdges(AbstractNode node) {
+        return null;
+    }
+    
+    /**
+     * @param node The node.
+     * @return The in-degree of the node, or 0 if the node does not exist. (The in-degree of a node is the number of edges that have the node as their destination.)
+     */
+    @Override
+    public int inDegree(AbstractNode node) {
+        return 0;
+    }
+    
+    /**
+     * @param node The node.
+     * @return The out-degree of the node, or 0 if the node does not exist. (The out-degree of a node is the number of edges that have the node as their source.)
+     */
+    @Override
+    public int outDegree(AbstractNode node) {
+        return 0;
     }
     
     /**

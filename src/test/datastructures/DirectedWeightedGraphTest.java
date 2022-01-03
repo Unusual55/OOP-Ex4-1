@@ -24,12 +24,12 @@ class DirectedWeightedGraphTest {
     void setUpEach() {
         // https://i.stack.imgur.com/hF3mQ.png
         this.graph1 = new DirectedWeightedGraph();
-        this.graph1.addNODE('A', 1)
-                .addNODE('B', 2)
-                .addNODE('C', 3)
-                .addNODE('D', 4)
-                .addNODE('E', 5)
-                .addNODE('F', 6);
+        this.graph1.newNode('A', 1)
+                .newNode('B', 2)
+                .newNode('C', 3)
+                .newNode('D', 4)
+                .newNode('E', 5)
+                .newNode('F', 6);
         this.graph1.addEdge('A', 'E', 0.1);
         this.graph1.addEdge('A', 'F', 0.9);
         this.graph1.addEdge('B', 'A', 0.3);
@@ -122,16 +122,16 @@ class DirectedWeightedGraphTest {
     }
     
     @Test
-    void addNODE() {
-        this.graph1.addNODE('G', 7).addNODE('G', 99);
+    void newNode() {
+        this.graph1.newNode('G', 7).newNode('G', 99);
         assertTrue(this.graph1.hasNode('G'));
         assertEquals(new Node('G', 7), this.graph1.getNode('G'));
         
-        this.graph1.addNODE('H', 8).addNODE('H', 99);
+        this.graph1.newNode('H', 8).newNode('H', 99);
         assertTrue(this.graph1.hasNode('H'));
         assertEquals(new Node('H', 8), this.graph1.getNode('H'));
         
-        this.graph1.addNODE('I', 9).addNODE('J', 10);
+        this.graph1.newNode('I', 9).newNode('J', 10);
         assertTrue(this.graph1.hasNode('I'));
         assertTrue(this.graph1.hasNode('J'));
         assertEquals(new Node('I', 9), this.graph1.getNode('I'));
@@ -166,25 +166,25 @@ class DirectedWeightedGraphTest {
     }
     
     @Test
-    void addEDGE() {
+    void connect() {
         assertEquals(11, this.graph1.getEdgeCount());
-        this.graph1.addEDGE('A', 'C', 0.1)
-                .addEDGE('A', 'C', 4)
-                .addEDGE('A', 'C', 0.1);
+        this.graph1.connect('A', 'C', 0.1)
+                .connect('A', 'C', 4)
+                .connect('A', 'C', 0.1);
         assertTrue(this.graph1.hasEdge('A', 'C'));
         assertEquals(new Edge('A', 'C', 0.1), this.graph1.getEdge('A', 'C'));
         assertEquals(12, this.graph1.getEdgeCount());
         
-        this.graph1.addEDGE('A', 'D', 0.2)
-                .addEDGE('A', 'D', 4)
-                .addEDGE('A', 'D', 0.2);
+        this.graph1.connect('A', 'D', 0.2)
+                .connect('A', 'D', 4)
+                .connect('A', 'D', 0.2);
         assertTrue(this.graph1.hasEdge('A', 'D'));
         assertEquals(new Edge('A', 'D', 0.2), this.graph1.getEdge('A', 'D'));
         assertEquals(13, this.graph1.getEdgeCount());
         
-        this.graph1.addEDGE('A', 'E', 0.3)
-                .addEDGE('A', 'E', 0.4)
-                .addEDGE('A', 'E', 0.5);
+        this.graph1.connect('A', 'E', 0.3)
+                .connect('A', 'E', 0.4)
+                .connect('A', 'E', 0.5);
         assertEquals(13, this.graph1.getEdgeCount());
     }
     
