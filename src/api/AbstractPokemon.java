@@ -62,15 +62,6 @@ public interface AbstractPokemon extends Comparable<AbstractPokemon> {
      */
     public AbstractPokemon setZ(double z);
     
-    
-//    /**
-//     * @param graph The graph
-//     * @return
-//     */
-//    default AbstractEdge getEdge(AbstractDirectedWeightedGraph graph) {
-//        return new AbstractEdge(this, dest);
-//    }
-    
     default JSONObject toJSON() {
         JSONObject Pokemon = new JSONObject();
         JSONObject props = new JSONObject();
