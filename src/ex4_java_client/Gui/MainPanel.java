@@ -14,8 +14,8 @@ public class MainPanel extends JFrame {
     private GraphAlgo algo;
     private DWGraph graph;
     private GraphDisplay painter;
-    private JLabel bg;
     public MainPanel(String json) throws Exception {
+        this.setTitle("Ofri and Nir PokeGUI");
         algo=new GraphAlgo();
         algo.loadGraph(json);
         this.graph=algo.getGraph();
@@ -33,19 +33,15 @@ public class MainPanel extends JFrame {
         painter.addPokemon(new Pokemon(35.203259591606134,32.1031462, 5.0, 1));
         painter.addPokemon(new Pokemon(35.19943876836158,32.10038388739496, 5.0, 1));
         painter.addPokemon(new Pokemon(35.20364167393059,32.109325057142854, 5.0, 1));
-
-        bg = new JLabel(new ImageIcon("Media/Pokeball.png"));
-        bg.setSize(this.getSize());
-//        this.add(bg);
         GraphDisplay.music();
-        this.add(painter);
+        this.add(painter,BorderLayout.CENTER);
         this.painter.setLayout(new BorderLayout());
 //        bg.setLayout(new FlowLayout());
 //        this.setLayout(new FlowLayout());
+
         this.setResizable(true);
 //        this.pack();
         repaint();
-        bg.transferFocus();
         this.setVisible(true);
 
 
@@ -55,12 +51,18 @@ public class MainPanel extends JFrame {
                 super.componentResized(e);
                 painter.Resize();
                 painter.repaint();
-                bg.setSize(getSize());
             }
         });
     }
 
     public static void main(String[] args) throws Exception {
         MainPanel mp=new MainPanel("C:\\Users\\ofrit\\IdeaProjects\\OOP-Ex4\\src\\data\\A5.json");
+        /**
+        * Tests that we made in order to check if the visual time really change
+        */
+//        mp.painter.updateTime(30000000);
+//        for(int i=30000000; i>0;i-=1){
+//            mp.painter.updateTime(i);
+//        }
     }
 }

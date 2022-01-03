@@ -24,7 +24,7 @@ import java.util.Iterator;
 public class GraphDisplay extends JPanel {
     private double[] BoundingBox;
     private DWGraph graph;
-    private int height, width;
+    private int height, width, time;
     private String bgImagePath = "Media/Pokeball.png";
     private double fOffsetX = 0.0, fOffsetY = 0.0, fScaleX = 1.0, fScaleY = 1.0, fStartPanX = 0.0, fStartPanY = 0.0;
     private double Wnode = 10, Hnode = 10;
@@ -172,6 +172,24 @@ public class GraphDisplay extends JPanel {
         }
     }
 
+    public void drawTime(Graphics g, int time){
+        Graphics2D g2d=(Graphics2D) g;
+        int afterdecimal=(int)(this.mod(time,1000));
+        int predecimal=(int)(time/1000);
+        float x=(float) ((7./8.)*(this.width*0.9));
+        float y=(float) ((1./8.)*(this.height*0.9));
+        g2d.drawString(predecimal+":"+afterdecimal,x, y);
+    }
+
+    public void updateTime(int newTime) {
+        this.time = newTime;
+        repaint();
+    }
+
+    public int mod(int a, int n) {
+        return ((a % n) + n) % n;
+    }
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
@@ -187,6 +205,7 @@ public class GraphDisplay extends JPanel {
             this.drawGraph(g);
             this.drawAgents(g);
             this.drawPokemons(g);
+            this.drawTime(g, this.time);
         } catch (IOException e) {
             System.out.println("something went wrong");
         }
@@ -245,7 +264,7 @@ public class GraphDisplay extends JPanel {
 
     public static void music() throws IOException, UnsupportedAudioFileException, LineUnavailableException {
         Clip clip= AudioSystem.getClip();
-        File f=new File("Media/champion.wav");
+        File f=new File("Media/op1.wav");
         AudioInputStream ais = AudioSystem.getAudioInputStream(f);
         clip.open(ais);
         clip.start();
