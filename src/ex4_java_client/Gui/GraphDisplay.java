@@ -30,7 +30,7 @@ public class GraphDisplay extends JPanel {
     private double Wnode = 10, Hnode = 10;
     private JFrame frame;
     private HashMap<Integer, AgentV1> agents;
-    private HashSet<Pokemon> pokemons;
+    private HashSet<VisPokemon> pokemons;
     private PokeRandom pokeRandom;
     public GraphDisplay(DWGraph g, int h, int w, JFrame frame) {
         this.BoundingBox=new double[4];
@@ -47,7 +47,9 @@ public class GraphDisplay extends JPanel {
 
     public void setPokemons(HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons) {
         this.agents = agents;
-        this.pokemons = pokemons;
+        for(Pokemon p:pokemons){
+            VisPokemon visualp=new VisPokemon(false, pokeRandom.randompokemon(), p);
+        }
     }
 
     public void addAgent(AgentV1 a){
@@ -55,7 +57,8 @@ public class GraphDisplay extends JPanel {
     }
 
     public void addPokemon(Pokemon p){
-        this.pokemons.add(p);
+        VisPokemon visp=new VisPokemon(false, pokeRandom.randompokemon(), p);
+        this.pokemons.add(visp);
     }
 
     public void Resize() {
@@ -161,11 +164,11 @@ public class GraphDisplay extends JPanel {
 
     public void drawPokemons(Graphics g) throws IOException {
         Graphics2D g2d=(Graphics2D) g;
-        for(Pokemon pikachu: this.pokemons){
+        for(VisPokemon pikachu: this.pokemons){
             double x=pikachu.getX();
             double y=pikachu.getY();
             double[] coor=CoordinatesTransformation(x,y);
-            String path="Media/sprites"+String.valueOf(this.pokeRandom.randompokemon());
+            String path=pikachu.getPath();
             File file=new File(path);
             BufferedImage image=ImageIO.read(file);
             g2d.drawImage(image, (int)coor[0], (int)coor[1], this.width/10, this.height/10, this);

@@ -16,7 +16,13 @@ public class VisPokemon extends Pokemon {
     public VisPokemon(boolean drawn, String path, double x, double y, int type, double value){
         super(x,y,value,type);
         this.Drawn=drawn;
-        this.Path=path;
+        this.Path="Media/sprites/"+path;
+    }
+
+    public VisPokemon(boolean drawn, String path, Pokemon p){
+        super(p);
+        this.Drawn=drawn;
+        this.Path="Media/sprites/"+path;
     }
 
     /**
@@ -24,5 +30,13 @@ public class VisPokemon extends Pokemon {
      */
     public void MarkAsDrawn(){
         this.Drawn=true;
+    }
+
+    public boolean equals(Object o){
+        return super.equals(o);
+    }
+
+    public String getPath(){
+        return this.Path;
     }
 }

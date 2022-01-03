@@ -60,7 +60,7 @@ public class MainPanel extends JFrame {
         /**
         * Tests that we made in order to check if the visual time really change
         */
-//        mp.painter.updateTime(30000000);
+        mp.painter.updateTime(30000000);
 //        for(int i=30000000; i>0;i-=1){
 //            mp.painter.updateTime(i);
 //        }

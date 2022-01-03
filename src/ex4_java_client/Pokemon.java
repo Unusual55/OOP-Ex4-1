@@ -19,6 +19,13 @@ public class Pokemon implements Comparable<Pokemon>{
         this.type=type;
     }
 
+    public Pokemon(Pokemon p){
+        this.x=p.x;
+        this.y=p.y;
+        this.value=p.value;
+        this.type=p.type;
+    }
+
     /**
      * This function returns the value of the pokemon
      * @return value
