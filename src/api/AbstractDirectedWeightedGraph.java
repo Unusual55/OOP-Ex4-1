@@ -147,7 +147,10 @@ public interface AbstractDirectedWeightedGraph extends AbstractGraph {
      * @param node The node to remove
      * @return The graph instance
      */
-    public AbstractDirectedWeightedGraph deleteNode(AbstractNode node);
+    default AbstractDirectedWeightedGraph deleteNode(AbstractNode node) {
+        this.removeNode(node);
+        return this;
+    }
     
     /**
      * @param id The id of the node to be removed
@@ -171,7 +174,10 @@ public interface AbstractDirectedWeightedGraph extends AbstractGraph {
      * @param edge The edge to remove
      * @return The graph instance
      */
-    public AbstractDirectedWeightedGraph disconnect(AbstractEdge edge);
+    default AbstractDirectedWeightedGraph disconnect(AbstractEdge edge) {
+        this.removeEdge(edge);
+        return this;
+    }
     
     /**
      * @param source      The id of the source node of the edge
