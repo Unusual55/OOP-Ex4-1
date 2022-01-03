@@ -19,6 +19,10 @@ public class Pokemon implements Comparable<Pokemon>{
         this.type=type;
     }
 
+    public Pokemon(){
+
+    }
+
     public Pokemon(Pokemon p){
         this.x=p.x;
         this.y=p.y;

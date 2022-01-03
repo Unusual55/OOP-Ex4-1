@@ -208,7 +208,9 @@ public class GraphDisplay extends JPanel {
             double[] coor = CoordinatesTransformation(x, y);
             File file = new File("Media/MasterBall.png");
             BufferedImage image = ImageIO.read(file);
-            g2d.drawImage(image, (int) coor[0], (int) coor[1], this.height / 25, this.height / 25, this);
+            double scale=20;
+            final double nW = this.width / scale, nH = this.height / scale;
+            g2d.drawImage(image, (int) (coor[0] - nW / 2), (int) (coor[1] - nH / 2), (int) nW, (int) nH, this);
         }
     }
 
@@ -460,7 +462,9 @@ public class GraphDisplay extends JPanel {
      */
     public void updateAgents(HashMap<Integer, AgentV1> agents) {
         for (int id : agents.keySet()) {
-            this.agents.put(id, agents.get(id));
+            AgentV1 a=agents.get(id);
+            double x=a.getX(), y=a.getY(), speed=a.getSpeed(), score=a.getScore();
+            int src=a.getSrc(), dest=a.getDest();
         }
     }
 }

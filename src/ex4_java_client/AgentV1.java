@@ -1,10 +1,14 @@
 package ex4_java_client;
 
+import java.util.LinkedList;
+
 public class AgentV1 {
     private int id;
-    private double score;
+    private double score, currentscore=0;
     private int src, dest;
     private double speed, x, y;
+    private Pokemon target;
+    private LinkedList<Integer> VictoryRoad;
 
     public int getId() {
         return id;
@@ -71,6 +75,8 @@ public class AgentV1 {
         this.speed=speed;
         this.x=x;
         this.y=y;
+        this.VictoryRoad=new LinkedList<>();
+        this.target=new Pokemon();
     }
 
     public AgentV1(int id, int src, int dest, double x, double y, double value, double speed){
@@ -89,9 +95,30 @@ public class AgentV1 {
         this.x=x;
         this.y=y;
         this.dest=dest;
+        if(score>this.currentscore){
+            this.target=new Pokemon();
+            this.currentscore=score;
+        }
+    }
+
+    public void update(AgentV1 a){
+        this.x=a.getX();
+        this.y=a.getY();
+        this.speed=a.getSpeed();
+        this.score=a.score;
+        this.src=a.getSrc();
+        this.dest=a.dest;
+        if(this.score>this.currentscore){
+            this.target=new Pokemon();
+            this.currentscore=score;
+        }
     }
 
     public boolean isAvailable(){
         return this.dest!=-1;
+    }
+
+    public void setTarget(Pokemon pokemon){
+        this.target=pokemon;
     }
 }

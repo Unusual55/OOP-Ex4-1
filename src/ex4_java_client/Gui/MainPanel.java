@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class MainPanel extends JFrame {
     private GraphAlgo algo;
@@ -64,5 +66,10 @@ public class MainPanel extends JFrame {
 //        for(int i=30000000; i>0;i-=1){
 //            mp.painter.updateTime(i);
 //        }
+    }
+
+    public void UpdateGUI(int time, double score, HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons){
+        this.painter.updateScore(score);
+        this.painter.updateTime(time);
     }
 }
