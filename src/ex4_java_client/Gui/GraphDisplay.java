@@ -56,6 +56,7 @@ public class GraphDisplay extends JPanel {
     /**
      * This function get a map of agents and set of pokemon and set them as the current pokemon and agents for
      * the simulation in the beginning of the simulation
+     *
      * @param agents
      * @param pokemons
      */
@@ -70,6 +71,7 @@ public class GraphDisplay extends JPanel {
     /**
      * This function get an Agent as an input and add it to our agents map. We used this function mainly for
      * testing the GUI.
+     *
      * @param a
      */
     public void addAgent(AgentV1 a) {
@@ -79,6 +81,7 @@ public class GraphDisplay extends JPanel {
     /**
      * This function get an Pokemon as an input and add it to our pokemon map. We used this function mainly for
      * testing the GUI.
+     *
      * @param p
      */
     public void addPokemon(Pokemon p) {
@@ -100,6 +103,7 @@ public class GraphDisplay extends JPanel {
     /**
      * This function get the needed paremeters and draw an arrow between the coordinates, we used took this function
      * from our second assignment Ex2.
+     *
      * @param gfx
      * @param start
      * @param end
@@ -149,6 +153,7 @@ public class GraphDisplay extends JPanel {
 
     /**
      * This function get a graphics object as input and draw the graph with it.
+     *
      * @param g
      * @throws IOException
      */
@@ -163,18 +168,16 @@ public class GraphDisplay extends JPanel {
         BufferedImage image = ImageIO.read(file);
         RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.addRenderingHints(rh);
-        int Him = image.getHeight();
-        int Wim = image.getWidth();
-        Him = (int) (this.height - Him) / 2;
-        Wim = (int) (this.width - Wim) / 2;
-        g2d.drawImage(image, Wim / 2, Him / 2, this);
+        double scale=1;
+        final double nW = image.getWidth() / scale, nH = image.getHeight() / scale;
+        g2d.drawImage(image, (int)(this.width/2 - nW/2), (int)(this.height/2 - nH/2), (int) nW, (int) nH, this);
         for (Vertex v : this.graph.nodes.values()) {
             double x = v.getX();
             double y = v.getY();
             double[] asrc = this.CoordinatesTransformation(v);
             Point2D src = new Point2D.Double(asrc[0], asrc[1]);
             g2d.setStroke(new BasicStroke(6f));
-            g2d.fillOval((int) src.getX(), (int) src.getY(), (int) this.Wnode, (int) this.Hnode);
+            g2d.fillOval((int) (src.getX() - this.Wnode/2), (int) (src.getY() - this.Hnode/2), (int) this.Wnode, (int) this.Hnode);
             g2d.setColor(Color.RED);
             g2d.drawString("" + v.getID(), (int) src.getX(), (int) src.getY());
             g2d.setColor(Color.BLACK);
@@ -186,13 +189,14 @@ public class GraphDisplay extends JPanel {
 //                Point2D dest = this.WorldToScreen(x2, y2);
                 double[] adest = this.CoordinatesTransformation(destV);
                 Point2D dest = new Point2D.Double(adest[0], adest[1]);
-                this.drawArrow(g2d, src, dest, stroke, stroke, 13);
+                drawArrow(g2d, src, dest, stroke, stroke, 13);
             }
         }
     }
 
     /**
      * This function draw the Agents on the graph based on their position.
+     *
      * @param g
      * @throws IOException
      */
@@ -213,6 +217,7 @@ public class GraphDisplay extends JPanel {
      * When creating a VisPokemon object, we create a random path to a pokemon image using PokeRandom and in this
      * function we use this path in order to create a buffer image which we draw on the graph at the wanted
      * position.
+     *
      * @param g
      * @throws IOException
      */
@@ -225,12 +230,19 @@ public class GraphDisplay extends JPanel {
             File file = new File(path);
             BufferedImage image = ImageIO.read(file);
             double[] coor = CoordinatesTransformation(x, y);
-            g2d.drawImage(image, (int) coor[0] - ((int) image.getWidth() / 10), (int) coor[1] - (int) (image.getHeight() / 10), this.width / 10, this.height / 10, this);
+            double scale = 10;
+            if (path.endsWith("boaz.png")) {
+                scale = 20;
+            }
+            final double nW = this.width / scale, nH = this.height / scale;
+            g2d.drawImage(image, (int) (coor[0] - nW / 2), (int) (coor[1] - nH / 2), (int) nW, (int) nH, this);
+//            g2d.drawImage(image, (int) coor[0] - ((int) image.getWidth() / 10), (int) coor[1] - (int) (image.getHeight() / 10), this.width / 10, this.height / 10, this);
         }
     }
 
     /**
      * This fuction draw the remaining time for the simulation at the left upper corner of the screen
+     *
      * @param g
      */
     public void drawTime(Graphics g) {
@@ -245,6 +257,7 @@ public class GraphDisplay extends JPanel {
     /**
      * This function gets an integer input which represents the remaining time for the simulation, set it as the
      * time and redraw it.
+     *
      * @param newTime
      */
     public void updateTime(int newTime) {
@@ -254,6 +267,7 @@ public class GraphDisplay extends JPanel {
 
     /**
      * This function draw the score on the left upper corner of the screen
+     *
      * @param g
      */
     public void drawScore(Graphics g) {
@@ -265,6 +279,7 @@ public class GraphDisplay extends JPanel {
 
     /**
      * This function get the current score, set it as the class property score and redraw the score
+     *
      * @param score
      */
     public void updateScore(double score) {
@@ -274,6 +289,7 @@ public class GraphDisplay extends JPanel {
 
     /**
      * This function used as Modulo operator: a%n
+     *
      * @param a
      * @param n
      * @return
@@ -285,20 +301,26 @@ public class GraphDisplay extends JPanel {
     /**
      * This function is the main drawing function of the GUI, This function create a buffer image and draw it
      * on the panel when it's ready
+     *
      * @param g
      */
     @Override
     public void paint(Graphics g) {
-        super.paint(g);
+//        super.paint(g);
+        final int marginX = 10;
+        final int marginY = 10;
+        final int offsetX = 0;
+        final int offsetY = 0;
 //        paintComponent(g);
-        Image scenario = createImage((int) (this.width * 0.9), (int) (this.height * 0.9));
+        Image scenario = createImage((this.width - 2 * marginX), (this.height - 2 * marginY));
         Graphics gr = scenario.getGraphics();
         paintComponent(gr);
-        g.drawImage(scenario, 0, 0, this.width, this.height, this);
+        g.drawImage(scenario, offsetX + marginX, offsetY + marginY, this.width - marginX, this.height - marginY, this);
     }
 
     /**
      * This function calls all of the relevant draw functions
+     *
      * @param g
      */
     public void paintComponent(Graphics g) {
@@ -339,45 +361,42 @@ public class GraphDisplay extends JPanel {
         BoundingBox[1] = Ymin;
         BoundingBox[2] = Xmax;
         BoundingBox[3] = Ymax;
-        if (this.graph.nodes.size() <= 3) {
-            BoundingBox[0] -= 10;
-            BoundingBox[1] -= 10;
-            BoundingBox[2] += 10;
-            BoundingBox[3] += 10;
-        }
+
     }
 
     /**
      * This function create new coordinates for the input vertex using liner transformation and return it's new
      * coordinates
+     *
      * @param p
      * @return
      */
     public double[] CoordinatesTransformation(Vertex p) {
-        double dpx = this.BoundingBox[2] - this.BoundingBox[0];
-        double dpy = this.BoundingBox[3] - this.BoundingBox[1];
-        double dcx = this.BoundingBox[2] - p.getX();
-        double dcy = this.BoundingBox[3] - p.getY();
-        double xfixed = (dcx / dpx * this.width * 0.8 + 0.01 * this.height);
-        double yfixed = (dcy / dpy * this.height * 0.8 + 0.01 * this.width);
-        return new double[]{xfixed, yfixed};
+        return this.CoordinatesTransformation(p.getX(), p.getY());
     }
 
     /**
      * This function create new coordinates for the inputs x and y using liner transformation and return it's new
      * coordinates
+     *
      * @param x
      * @param y
      * @return
      */
     public double[] CoordinatesTransformation(double x, double y) {
+//        final double marginX = 0;
+//        final double marginY = 0;
+//        final double slopeX = (this.width - marginX)/(this.BoundingBox[2] - this.BoundingBox[0]);
+//        final double slopeY = (this.height - marginY)/(this.BoundingBox[3] - this.BoundingBox[1]);
+//        double xfixed =  marginX + slopeX * (x - this.BoundingBox[0]);
+//        double yfixed =  marginY + slopeY * (y - this.BoundingBox[1]);
         double dpx = this.BoundingBox[2] - this.BoundingBox[0];
         double dpy = this.BoundingBox[3] - this.BoundingBox[1];
         double dcx = this.BoundingBox[2] - x;
         double dcy = this.BoundingBox[3] - y;
-        double xfixed = (dcx / dpx * this.width * 0.8 + 0.01 * this.height);
-        double yfixed = (dcy / dpy * this.height * 0.8 + 0.01 * this.width);
-        return new double[]{xfixed, yfixed};
+        double xfixed = (dcx / dpx * this.width * 0.8);
+        double yfixed = (dcy / dpy * this.height * 0.8);
+        return new double[]{xfixed+20, yfixed+20};
     }
 //
 //    public double[] CoordinatesTransformation(double x, double y, Image image) {
@@ -392,6 +411,7 @@ public class GraphDisplay extends JPanel {
 
     /**
      * This static function plays the first opening song of pokemon in the background
+     *
      * @throws IOException
      * @throws UnsupportedAudioFileException
      * @throws LineUnavailableException
@@ -416,6 +436,7 @@ public class GraphDisplay extends JPanel {
 
     /**
      * This function get the current active pokemon, and recreate the pokemon map so it will match the input set
+     *
      * @param newset
      */
     public void pokemonUpdate(HashSet<Pokemon> newset) {
@@ -434,6 +455,7 @@ public class GraphDisplay extends JPanel {
 
     /**
      * This function update the agents map, using an input agent map
+     *
      * @param agents
      */
     public void updateAgents(HashMap<Integer, AgentV1> agents) {

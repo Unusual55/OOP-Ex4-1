@@ -13,7 +13,7 @@ import java.util.Random;
 /**
  * This class represent a pokemon randomizer which supports out gui.
  * we read a JSON file which contain all of the data, and we use it in order to create a valid path to a random
- * photo of a random pokemon,
+ * photo of a random pokemon or a suprise super legendary pokemon.
  */
 public class PokeRandom {
     private HashMap<Integer, String> pokemap;
@@ -50,11 +50,11 @@ public class PokeRandom {
      */
     public String randompokemon() {
         int id = rnd.nextInt(pokeAmount - 1) + 1;
-        if (id % 6 == 0){
+        if (id % 2 == 0){
             int id2= rnd.nextInt(pokeAmount-1)+1;
-            if(id2%6==0){
+            if(id2%2==0){
                 int id3=rnd.nextInt(pokeAmount-1)+1;
-                if(id3%6==0) {
+                if(id3%2==0) {
                     return "/boaz.png";
                 }
             }
