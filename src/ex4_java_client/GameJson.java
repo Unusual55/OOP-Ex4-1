@@ -1,11 +1,10 @@
 package ex4_java_client;
 
-import com.google.gson.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 
 public class GameJson {
     public GameJson() {
@@ -43,8 +42,8 @@ public class GameJson {
      * @param pokemons
      * @return set of pokemons
      */
-    public LinkedList<Pokemon> JsonToPokemon(String pokemons) {
-        LinkedList<Pokemon> pokelist = new LinkedList<>();
+    public HashSet<Pokemon> JsonToPokemon(String pokemons) {
+        HashSet<Pokemon> pokelist = new HashSet<>();
         final JSONObject obj2 = new JSONObject(pokemons);
         final JSONArray agentsArray = obj2.getJSONArray("Pokemons");
         for (int i = 0; i < agentsArray.length(); i++) {
@@ -59,6 +58,13 @@ public class GameJson {
             pokelist.add(charmander);
         }
         return pokelist;
+    }
+
+    public double[] JsonToInfo(String infojson){
+        final JSONObject obj2 = new JSONObject(infojson).getJSONObject("GameServer");
+        double agents=Double.parseDouble(String.valueOf(obj2.getDouble("agents")));
+        double grade=Double.parseDouble(String.valueOf(obj2.getDouble("grade")));
+        return new double[]{agents, grade};
     }
 
 }

@@ -3,6 +3,8 @@ package datastructures;
 import datastructures.serializers.*;
 import com.google.gson.*;
 import org.jgrapht.alg.util.Pair;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -32,6 +34,35 @@ public class JsonControl {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void loadGraphJson(String graphStr){
+        GsonBuilder builder=new GsonBuilder()
+                .registerTypeAdapter(Edge.class, new EdgeAdapter())
+                .registerTypeAdapter(Vertex.class, new NodeAdapter())
+                .setPrettyPrinting();
+        Gson g=builder.create();
+        JSONObject jsonArray=new JSONObject(graphStr);
+        JSONArray nodes=jsonArray.getJSONArray("Nodes");
+        JSONArray edges=jsonArray.getJSONArray("Edges");
+        this.g=new DWGraph();
+        for(int i=0; i<nodes.length();i++){
+            JSONObject obj=nodes.getJSONObject(i);
+            int id=obj.getInt("id");
+            String pos=obj.getString("pos");
+            String[] position=pos.split(",");
+            double x=Double.parseDouble(position[0]);
+            double y=Double.parseDouble(position[1]);
+            Vertex v=new Vertex(id,0d,x,y,0d);
+            this.g.addNode(v);
+        }
+        for(int i=0; i<edges.length();i++){
+            JSONObject obj=edges.getJSONObject(i);
+            int src=obj.getInt("src");
+            int dest=obj.getInt("dest");
+            double weight=obj.getDouble("w");
+            this.g.addEdge(src, dest, weight);
         }
     }
 }

@@ -121,4 +121,8 @@ public class AgentV1 {
     public void setTarget(Pokemon pokemon){
         this.target=pokemon;
     }
+
+    public void setPath(LinkedList<Integer> list){
+        this.VictoryRoad=list;
+    }
 }

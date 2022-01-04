@@ -1,4 +1,5 @@
 package datastructures;
+import ex4_java_client.Pokemon;
 import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 
 import java.util.HashMap;
@@ -72,5 +73,23 @@ public class DWGraph{
      */
     public Set<Edge> getAllEdges(){
         return this.graph.edgeSet();
+    }
+
+    public int[] findWantedEdge(Pokemon p){
+        Set<Edge> edges=this.graph.edgeSet();
+        int type=p.type();
+        for (Edge e:edges) {
+            if((e.getSource()<e.getDestination() && type==-1)||e.getSource()>e.getDestination() && type==1){
+                continue;
+            }
+            Vertex src=this.nodes.get(e.getSource());
+            Vertex dest=this.nodes.get(e.getDestination());
+            double x1=src.getX(), x2=dest.getX(), x3=p.getX();
+            double y1=src.getY(), y2=dest.getY(), y3=p.getY();
+            if((y2 - y1) * (x3 - x2) == (y3 - y2) * (x2 - x1)){
+                return new int[]{src.getID(), dest.getID()};
+            }
+        }
+        return new int[]{-1};
     }
 }

@@ -75,7 +75,7 @@ public class Pokemon implements Comparable<Pokemon>{
         }
         boolean b1=this.type==((Pokemon) o).type, b2=this.value==((Pokemon) o).value;
         boolean b3=this.x==((Pokemon) o).x, b4=this.y==((Pokemon) o).y;
-        return b1&&b2&&b3&&b4;
+        return (b1)&&(b2)&&(b3)&&(b4);
     }
 
     /**
@@ -96,5 +96,9 @@ public class Pokemon implements Comparable<Pokemon>{
             return 1;
         }
         return -1;
+    }
+
+    public String toString(){
+        return "("+this.x+","+this.y+") value: "+this.value+" type: "+this.type;
     }
 }

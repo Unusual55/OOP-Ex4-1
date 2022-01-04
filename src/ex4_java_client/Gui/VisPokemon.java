@@ -26,10 +26,6 @@ public class VisPokemon extends Pokemon {
      * This function mark this pokemon as drawn so we will know we don't need to draw it again until we catch it.
      */
 
-    public boolean equals(Object o){
-        return super.equals(o);
-    }
-
     public String getPath(){
         return this.Path;
     }

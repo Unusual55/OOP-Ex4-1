@@ -15,10 +15,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * This class controlls the graphic section of out GUI visualisation. In this class we draw the graph, agents
@@ -37,7 +34,7 @@ public class GraphDisplay extends JPanel {
     private double score = 0;
     private JFrame frame;
     private HashMap<Integer, AgentV1> agents;
-    private HashMap<Pokemon, VisPokemon> pokemons;
+    private HashMap<String, VisPokemon> pokemons;
     final private PokeRandom pokeRandom;
 
     public GraphDisplay(DWGraph g, int h, int w, JFrame frame) {
@@ -64,7 +61,7 @@ public class GraphDisplay extends JPanel {
         this.agents = agents;
         for (Pokemon p : pokemons.values()) {
             VisPokemon visualp = new VisPokemon(pokeRandom.randompokemon(), p);
-            this.pokemons.put(p, visualp);
+            this.pokemons.put(p.toString(), visualp);
         }
     }
 
@@ -86,7 +83,7 @@ public class GraphDisplay extends JPanel {
      */
     public void addPokemon(Pokemon p) {
         VisPokemon visp = new VisPokemon(pokeRandom.randompokemon(), p);
-        this.pokemons.put(p, visp);
+        this.pokemons.put(p.toString(), visp);
     }
 
     /**
@@ -226,6 +223,9 @@ public class GraphDisplay extends JPanel {
     public void drawPokemons(Graphics g) throws IOException {
         Graphics2D g2d = (Graphics2D) g;
         for (VisPokemon pikachu : this.pokemons.values()) {
+            if(pikachu==null){
+                System.out.println("here");
+            }
             double x = pikachu.getX();
             double y = pikachu.getY();
             String path = pikachu.getPath();
@@ -424,9 +424,9 @@ public class GraphDisplay extends JPanel {
         AudioInputStream ais = AudioSystem.getAudioInputStream(f);
         clip.open(ais);
         clip.start();
-        SwingUtilities.invokeLater(() -> {
-            JOptionPane.showMessageDialog(null, "Close on exit!");
-        });
+//        SwingUtilities.invokeLater(() -> {
+//            JOptionPane.showMessageDialog(null, "Close on exit!");
+//        });
     }
 
 //    public static void music2() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
@@ -442,17 +442,19 @@ public class GraphDisplay extends JPanel {
      * @param newset
      */
     public void pokemonUpdate(HashSet<Pokemon> newset) {
-        HashMap<Pokemon, VisPokemon> ret = new HashMap<>();
+        HashMap<String, VisPokemon> ret = new HashMap<>();
         Iterator<Pokemon> pokerator = newset.iterator();
+        Set<String> pokeset=this.pokemons.keySet();
         while (pokerator.hasNext()) {
             Pokemon p = pokerator.next();
-            if (this.pokemons.containsKey(p)) {
-                ret.put(p, this.pokemons.get(p));
+            if (this.pokemons.containsKey(p.toString())) {
+                ret.put(p.toString(), this.pokemons.get(p.toString()));
             } else {
-                ret.put(p, new VisPokemon(pokeRandom.randompokemon(), p));
+                ret.put(p.toString(), new VisPokemon(pokeRandom.randompokemon(), p));
             }
         }
         this.pokemons = ret;
+        repaint();
     }
 
     /**
@@ -461,10 +463,13 @@ public class GraphDisplay extends JPanel {
      * @param agents
      */
     public void updateAgents(HashMap<Integer, AgentV1> agents) {
+        if(agents.size()>this.agents.size()){
+            this.agents=agents;
+            return;
+        }
         for (int id : agents.keySet()) {
             AgentV1 a=agents.get(id);
-            double x=a.getX(), y=a.getY(), speed=a.getSpeed(), score=a.getScore();
-            int src=a.getSrc(), dest=a.getDest();
+            this.agents.get(id).update(a);
         }
     }
 }

@@ -35,6 +35,5 @@ class TimedMoveTest {
         System.out.println(pq.poll().Agentid);
         System.out.println(pq.poll().Agentid);
         System.out.println(pq.poll().Agentid);
-
     }
 }
