@@ -23,13 +23,13 @@ public class StudentCode {
         String graphStr = client.getGraph();
         String pokemonsStr = client.getPokemons();
         String isRunningStr = client.isRunning();
-        GameJson gm=new GameJson();
         GraphAlgo ga=new GraphAlgo();
         ga.loadGraph(graphStr);
         DWGraph g=ga.getGraph();
+        GameJson gm=new GameJson(g);
         String info=client.getInfo();
         double[] data=gm.JsonToInfo(info);
-        int agentnumber=Integer.parseInt(String.valueOf(data[0]));
+        int agentnumber=(int)data[0];
         Pair<Integer, HashMap<Integer, DijkstreeData>> centerout= ga.Center();
         client.addAgent("{\"id\":"+centerout.getFirst()+"}");
         String agentsStr = client.getAgents();
@@ -49,7 +49,7 @@ public class StudentCode {
             gui.updateGui(time, agents, pokemons, data[1]);
 //            System.out.println(client.timeToEnd());
             for(AgentV1 a: agents.values()) {
-                if(a.isAvailable()){continue;}
+                if(!a.isAvailable()){continue;}
                 int id=a.getId(), src=a.getSrc();
                 int next = mod(src-1, g.graph.vertexSet().size());
                 client.chooseNextEdge("{\"agent_id\":"+id+", \"next_node_id\": " + next + "}");

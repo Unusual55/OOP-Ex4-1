@@ -76,7 +76,7 @@ public class AgentV1 {
         this.x=x;
         this.y=y;
         this.VictoryRoad=new LinkedList<>();
-        this.target=new Pokemon();
+        this.target=null;
     }
 
     public AgentV1(int id, int src, int dest, double x, double y, double value, double speed){
@@ -87,6 +87,8 @@ public class AgentV1 {
         this.x=x;
         this.y=y;
         this.speed=speed;
+        this.target=null;
+        this.VictoryRoad=new LinkedList<>();
     }
 
     public void update(double score, double speed, double x, double y, int dest){
@@ -96,9 +98,10 @@ public class AgentV1 {
         this.y=y;
         this.dest=dest;
         if(score>this.currentscore){
-            this.target=new Pokemon();
+            this.target=null;
             this.currentscore=score;
         }
+        this.advanceNextMove();
     }
 
     public void update(AgentV1 a){
@@ -109,13 +112,14 @@ public class AgentV1 {
         this.src=a.getSrc();
         this.dest=a.dest;
         if(this.score>this.currentscore){
-            this.target=new Pokemon();
+            this.target=null;
             this.currentscore=score;
         }
+        this.advanceNextMove();
     }
 
     public boolean isAvailable(){
-        return this.dest!=-1;
+        return this.dest==-1;
     }
 
     public void setTarget(Pokemon pokemon){
@@ -124,5 +128,30 @@ public class AgentV1 {
 
     public void setPath(LinkedList<Integer> list){
         this.VictoryRoad=list;
+    }
+
+    public void removeTarget(){
+        this.target=null;
+        this.VictoryRoad=new LinkedList<>();
+    }
+
+    public int getNextMove(){
+        if(this.VictoryRoad.size()==0){
+            return -1;
+        }
+        return this.VictoryRoad.getFirst();
+    }
+
+    public void advanceNextMove(){
+        if(this.VictoryRoad.size()==0){
+            return;
+        }
+        if(this.src==this.VictoryRoad.getFirst()){
+            this.VictoryRoad.removeFirst();
+        }
+    }
+
+    public Pokemon getTarget(){
+        return this.target;
     }
 }

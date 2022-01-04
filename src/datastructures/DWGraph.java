@@ -76,20 +76,40 @@ public class DWGraph{
     }
 
     public int[] findWantedEdge(Pokemon p){
+        final double EPS=0.00000001;
         Set<Edge> edges=this.graph.edgeSet();
         int type=p.type();
         for (Edge e:edges) {
-            if((e.getSource()<e.getDestination() && type==-1)||e.getSource()>e.getDestination() && type==1){
+            if((e.getSource()<e.getDestination() && type<0)||e.getSource()>e.getDestination() && type>0){
                 continue;
             }
             Vertex src=this.nodes.get(e.getSource());
             Vertex dest=this.nodes.get(e.getDestination());
             double x1=src.getX(), x2=dest.getX(), x3=p.getX();
             double y1=src.getY(), y2=dest.getY(), y3=p.getY();
-            if((y2 - y1) * (x3 - x2) == (y3 - y2) * (x2 - x1)){
-                return new int[]{src.getID(), dest.getID()};
+            double slope;
+            if(y2-y1==0){//if the segment is parallel to X axis
+                slope=y2;
+            }
+            else if(x2-x1==0){//if the segment is parallel to Y axis
+                if(x3==x2){
+                    if((y2 - y1) * (x3 - x2) == (y3 - y2) * (x2 - x1)){
+                        return new int[]{src.getID(), dest.getID()};
+                    }
+                }
+                continue;
+            }
+            else{
+                slope=(y2-y1)/(x2-x1);
+                double ans=slope*(x3-x1)+y1;
+                double ans2=slope*(x3-x2)+y2;
+                double d1=src.distance(dest), d2=src.distance(x3,y3,0d), d3=dest.distance(x3,y3,0d);
+                double ans3=d2+d3;
+                if(y3==ans||ans2==y3||d1==ans3||Math.abs(ans3-d1)<=EPS){
+                    return new int[]{src.getID(), dest.getID()};
+                }
             }
         }
-        return new int[]{-1};
+        return new int[]{-1};//if we didn't find any edge
     }
 }

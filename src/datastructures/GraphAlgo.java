@@ -4,7 +4,6 @@ import org.jgrapht.alg.util.Pair;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.PriorityQueue;
 
 public class GraphAlgo {
@@ -94,15 +93,5 @@ public class GraphAlgo {
             dijkstree.put(key, djd);
         }
         return new Pair(minid, dijkstree);
-    }
-
-    public LinkedList<Integer> getPath(DijkstreeData dd, int src, int dest){
-        int index=dest;
-        LinkedList<Integer> ret=new LinkedList<>();
-        while(index!=src){
-            ret.addFirst(index);
-            index=dd.path.get(dd);
-        }
-        return ret;
     }
 }

@@ -1,6 +1,7 @@
 package datastructures;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 public class DijkstreeData {
     public HashMap<Integer, Double> distance;
@@ -8,5 +9,15 @@ public class DijkstreeData {
     public DijkstreeData(HashMap<Integer, Double> distance, HashMap<Integer, Integer> path){
         this.distance=distance;
         this.path=path;
+    }
+
+    public LinkedList<Integer> getPath(int src, int dest){
+        int index=dest;
+        LinkedList<Integer> ret=new LinkedList<>();
+        while(index!=src){
+            ret.addFirst(index);
+            index=this.path.get(index);
+        }
+        return ret;
     }
 }

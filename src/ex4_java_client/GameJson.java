@@ -1,5 +1,6 @@
 package ex4_java_client;
 
+import datastructures.DWGraph;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -7,8 +8,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class GameJson {
-    public GameJson() {
-
+    private DWGraph graph;
+    public GameJson(DWGraph g) {
+        this.graph=g;
     }
 
     /**
@@ -54,8 +56,10 @@ public class GameJson {
             double x = Double.parseDouble(coor[0]);
             double y = Double.parseDouble(coor[1]);
             final int type = pokemon.getInt("type");
-            Pokemon charmander = new Pokemon(x, y, value, type);
-            pokelist.add(charmander);
+            Pokemon p = new Pokemon(x, y, value, type);
+            int[] indexes= graph.findWantedEdge(p);
+            p.updateIndexes(indexes);
+            pokelist.add(p);
         }
         return pokelist;
     }

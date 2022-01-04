@@ -101,4 +101,29 @@ public class Pokemon implements Comparable<Pokemon>{
     public String toString(){
         return "("+this.x+","+this.y+") value: "+this.value+" type: "+this.type;
     }
+
+    private void setEsrc(int src){
+        this.Esrc=src;
+    }
+
+    private void setEdest(int dest){
+        this.Edest=dest;
+    }
+
+    public void updateIndexes(int[] indexes){
+        if(indexes.length==1){
+            return;
+        }
+        this.setEsrc(indexes[0]);
+        this.setEdest(indexes[1]);
+    }
+
+    public int getEsrc(){
+        return this.Esrc;
+    }
+
+    public int getEdest(){
+        return this.Edest;
+    }
+
 }

@@ -5,7 +5,7 @@ import ex4_java_client.Gui.MainPanel;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class GuiThread implements Runnable{
+public class GuiThread extends Thread{
     private MainPanel mainPanel;
     private String graph;
     public GuiThread(int time, HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons, String graphJson) throws Exception {

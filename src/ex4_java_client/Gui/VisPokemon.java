@@ -12,10 +12,10 @@ import ex4_java_client.Pokemon;
 public class VisPokemon extends Pokemon {
     private String Path;
 
-    public VisPokemon(String path, double x, double y, int type, double value){
-        super(x,y,value,type);
-        this.Path="Media/sprites/"+path;
-    }
+//    public VisPokemon(String path, double x, double y, int type, double value){
+//        super(x,y,value,type);
+//        this.Path="Media/sprites/"+path;
+//    }
 
     public VisPokemon(String path, Pokemon p){
         super(p);
