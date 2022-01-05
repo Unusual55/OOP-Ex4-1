@@ -19,6 +19,7 @@ public class GameJson {
      * @return map of agents
      */
     public HashMap<Integer, AgentV1> JsonToAgents(String agents) {
+        graph.resetEdgesValues();
         HashMap<Integer, AgentV1> agentmap = new HashMap<>();
         final JSONObject obj2 = new JSONObject(agents);
         final JSONArray agentsArray = obj2.getJSONArray("Agents");

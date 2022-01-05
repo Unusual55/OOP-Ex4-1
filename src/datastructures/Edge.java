@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class Edge implements AbstractEdge {
     private int src, dest, type;
     private double weight;
+    private double value=0;
     public Edge(int src, int dest, double w){
         this.src=src;
         this.dest=dest;
@@ -129,5 +130,16 @@ public class Edge implements AbstractEdge {
      */
     public String toString(){
         return "("+src+", "+dest+"): "+weight;
+    }
+
+    public double getValue(){
+        return this.value;
+    }
+
+    public void updateValue(double extra){
+        this.value+=extra;
+    }
+    public void resetValue(){
+        this.value=0;
     }
 }

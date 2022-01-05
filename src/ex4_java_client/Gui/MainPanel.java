@@ -35,7 +35,7 @@ public class MainPanel extends JFrame {
 //        painter.addPokemon(new Pokemon(35.203259591606134,32.1031462, 5.0, 1));
 //        painter.addPokemon(new Pokemon(35.19943876836158,32.10038388739496, 5.0, 1));
 //        painter.addPokemon(new Pokemon(35.20364167393059,32.109325057142854, 5.0, 1));
-        GraphDisplay.music();
+//        GraphDisplay.music();
         this.add(painter,BorderLayout.CENTER);
         this.painter.setLayout(new BorderLayout());
 //        bg.setLayout(new FlowLayout());

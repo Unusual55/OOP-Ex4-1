@@ -31,7 +31,7 @@ public class RunClient {
         int center = centerout.getFirst();
         HashMap<Integer, DijkstreeData> data = centerout.getSecond();
         PositioningAlgorithms posAlgo = new PositioningAlgorithms();
-        HashMap<Integer, Integer> AgentsPositions = posAlgo.getPositions(center, AgentsNumber, pokemons);
+        HashMap<Integer, Integer> AgentsPositions = posAlgo.getPositions(center, AgentsNumber, pokemons, g.graph.edgeSet());
         for (int pos : AgentsPositions.values()) {
             client.addAgent("{\"id\":" + pos + "}");
         }
@@ -47,7 +47,6 @@ public class RunClient {
         Timer timer = new Timer();
         MoveTask mt=new MoveTask(client);
         while (client.isRunning().equals("true")) {
-            client.move();
             agentsStr = client.getAgents();
             pokemonStr = client.getPokemons();
             agents = gm.JsonToAgents(agentsStr);
@@ -62,9 +61,9 @@ public class RunClient {
                 if (!a.isAvailable()) {
                     continue;
                 }
-                if (a.getSpeed() > 1.0) {
-                    System.out.println(a.getSpeed());
-                }
+//                if (a.getSpeed() > 1.0) {
+//                    System.out.println(a.getSpeed());
+//                }
                 String Move = allocAlgo.AgentNextMove(a.getId());
                 client.chooseNextEdge(Move);
                 System.out.println(Move);
@@ -72,53 +71,13 @@ public class RunClient {
             }
             mt.run();
             mt.join();
-            System.out.println(client.getInfo());
-//            if(size>=10){
-//                if(currtime-log.get(size-10)<1000){
-//                    continue;
-//                }
+            client.move();
+//            System.out.println(client.getInfo());
+//            if(agents.get(0).getTarget()==agents.get(1).getTarget()){
+//                System.out.println("1");
 //            }
-//            else {
-//                client.move();
-//                log.addLast(currtime);
-//                System.out.println(client.getInfo());
-//            }
-//            if (log.size() < 10) {
-//                client.move();
-//                log.addLast(System.currentTimeMillis());
-//            } else {
-//                int lastIndex = log.size() - 1;
-//                if (System.currentTimeMillis() - log.get(lastIndex - 9) < 1000) {
-//                    continue;
-//                } else {
-//                    client.move();
-//                    log.addLast(System.currentTimeMillis());
-//                }
-//            }
-//            if (log.size() > 10) {
-//                int lastIndex = log.size() - 1;
-//                long lastInsertionTime = log.getLast();
-//                if (System.currentTimeMillis() - log.get(lastIndex - 10) < 1000) {
-//                    while (System.currentTimeMillis() - log.get(lastIndex - 10) < 1000) {
-//                        continue;
-//                    }
-//                    client.move();
-//                    System.out.println("move>10");
-//                    log.addLast(System.currentTimeMillis());
-//                }
-//                else{
-//                    client.move();
-//                    System.out.println("move>10");
-//                    log.addLast(System.currentTimeMillis());
-//                }
-//            }
-//            else if(log.size()<=10){
-//                client.move();
-//                System.out.println("move<10");
-//                log.add(System.currentTimeMillis());
-//            }
-//            System.out.println("0");
         }
+        client.stop();
         try {
             client.stopConnection();
             System.exit(1);
@@ -131,12 +90,13 @@ public class RunClient {
 class MoveTask extends Thread {
     private Client c;
     public MoveTask(Client c) {
+        this.c=c;
     }
 
     @Override
     public void run() {
         try {
-            Thread.sleep(99);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

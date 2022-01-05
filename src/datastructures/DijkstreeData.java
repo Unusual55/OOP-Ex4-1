@@ -18,6 +18,9 @@ public class DijkstreeData {
             ret.addFirst(index);
             index=this.path.get(index);
         }
+        if(ret.size()>0&&ret.getFirst()!=src){
+            ret.addFirst(src);
+        }
         return ret;
     }
 }

@@ -106,10 +106,17 @@ public class DWGraph{
                 double d1=src.distance(dest), d2=src.distance(x3,y3,0d), d3=dest.distance(x3,y3,0d);
                 double ans3=d2+d3;
                 if(y3==ans||ans2==y3||d1==ans3||Math.abs(ans3-d1)<=EPS){
+                    e.updateValue(p.getValue());
                     return new int[]{src.getID(), dest.getID()};
                 }
             }
         }
         return new int[]{-1};//if we didn't find any edge
+    }
+
+    public void resetEdgesValues(){
+        for(Edge e:this.graph.edgeSet()){
+            e.resetValue();
+        }
     }
 }

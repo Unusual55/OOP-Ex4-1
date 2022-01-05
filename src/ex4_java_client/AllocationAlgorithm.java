@@ -92,9 +92,9 @@ public class AllocationAlgorithm {
                     continue;
                 }
                 int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc(), id = a.getId();
-                if (src == dest) {
-                    continue;
-                }
+//                if (src == dest) {
+//                    continue;
+//                }
                 if (a.getTarget() == p) {
                     allocated.put(p.toString(), a);
                 }
@@ -164,7 +164,7 @@ public class AllocationAlgorithm {
         double dist2 = this.data.get(src2).distance.get(p.getEsrc()) + this.graph.getEdge(p.getEsrc(), p.getEdest()).getWeight();
         dist1=dist2/agent1.getSpeed();
         dist2 = dist2/agent2.getSpeed();
-        if (dist1 > dist2) {
+        if (dist1-0.4 > dist2) {
             return agent2.getId();
         }
         return agent1.getId();

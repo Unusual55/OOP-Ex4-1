@@ -119,7 +119,9 @@ public class AgentV1 {
             this.currentscore=score;
         }
         this.advanceNextMove();
-        this.catchtime=a.catchtime;
+        if(a.getCatchTime()!=-1) {
+            this.catchtime = a.catchtime;
+        }
     }
 
     public boolean isAvailable(){
@@ -137,6 +139,7 @@ public class AgentV1 {
     public void removeTarget(){
         this.target=null;
         this.catchtime=-1;
+        this.VictoryRoad=new LinkedList<>();
     }
 
     public int getNextMove(){
@@ -165,5 +168,9 @@ public class AgentV1 {
 
     public void setCatchTime(long time){
         this.catchtime=time;
+    }
+
+    public LinkedList<Integer> getPath(){
+        return this.VictoryRoad;
     }
 }

@@ -1,5 +1,7 @@
 package ex4_java_client;
 
+import java.util.Comparator;
+
 /**
  * This function represent a pokemon. Each pokemon contain few fields of information:
  * 1. Value: How many points the pokemon worth
@@ -17,10 +19,6 @@ public class Pokemon implements Comparable<Pokemon>{
         this.y = y;
         this.value=value;
         this.type=type;
-    }
-
-    public Pokemon(){
-
     }
 
     public Pokemon(Pokemon p){
