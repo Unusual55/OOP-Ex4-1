@@ -9,6 +9,7 @@ public class AgentV1 {
     private double speed, x, y;
     private Pokemon target;
     private LinkedList<Integer> VictoryRoad;
+    private long catchtime;
 
     public int getId() {
         return id;
@@ -79,7 +80,7 @@ public class AgentV1 {
         this.target=null;
     }
 
-    public AgentV1(int id, int src, int dest, double x, double y, double value, double speed){
+    public AgentV1(int id, int src, int dest, double x, double y, double value, double speed, long catchtime){
         this.id=id;
         this.src=src;
         this.dest=dest;
@@ -89,9 +90,10 @@ public class AgentV1 {
         this.speed=speed;
         this.target=null;
         this.VictoryRoad=new LinkedList<>();
+        this.catchtime=catchtime;
     }
 
-    public void update(double score, double speed, double x, double y, int dest){
+    public void update(double score, double speed, double x, double y, int dest, long catchtime){
         this.score=score;
         this.speed=speed;
         this.x=x;
@@ -102,6 +104,7 @@ public class AgentV1 {
             this.currentscore=score;
         }
         this.advanceNextMove();
+        this.catchtime=catchtime;
     }
 
     public void update(AgentV1 a){
@@ -116,6 +119,7 @@ public class AgentV1 {
             this.currentscore=score;
         }
         this.advanceNextMove();
+        this.catchtime=a.catchtime;
     }
 
     public boolean isAvailable(){
@@ -132,7 +136,7 @@ public class AgentV1 {
 
     public void removeTarget(){
         this.target=null;
-        this.VictoryRoad=new LinkedList<>();
+        this.catchtime=-1;
     }
 
     public int getNextMove(){
@@ -153,5 +157,13 @@ public class AgentV1 {
 
     public Pokemon getTarget(){
         return this.target;
+    }
+
+    public long getCatchTime(){
+        return this.catchtime;
+    }
+
+    public void setCatchTime(long time){
+        this.catchtime=time;
     }
 }

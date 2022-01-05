@@ -33,7 +33,7 @@ public class GameJson {
             double speed = agent.getDouble("speed");
             int src = agent.getInt("src");
             int dest = agent.getInt("dest");
-            AgentV1 AskKetchumFromPalletTown = new AgentV1(id, src, dest, x, y, value, speed);
+            AgentV1 AskKetchumFromPalletTown = new AgentV1(id, src, dest, x, y, value, speed,-1);
             agentmap.put(id, AskKetchumFromPalletTown);
         }
         return agentmap;

@@ -32,7 +32,7 @@ public class RunClient {
         HashMap<Integer, DijkstreeData> data = centerout.getSecond();
         PositioningAlgorithms posAlgo = new PositioningAlgorithms();
         HashMap<Integer, Integer> AgentsPositions = posAlgo.getPositions(center, AgentsNumber, pokemons);
-        for (int pos : AgentsPositions.keySet()) {
+        for (int pos : AgentsPositions.values()) {
             client.addAgent("{\"id\":" + pos + "}");
         }
         String agentsStr = client.getAgents();
