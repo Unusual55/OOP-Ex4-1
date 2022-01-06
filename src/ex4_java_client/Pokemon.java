@@ -1,6 +1,7 @@
 package ex4_java_client;
 
 import java.util.Comparator;
+import java.util.HashSet;
 
 /**
  * This function represent a pokemon. Each pokemon contain few fields of information:
@@ -13,8 +14,10 @@ public class Pokemon implements Comparable<Pokemon>{
     private double value, x, y;
     private int type;
     private int Esrc, Edest;
+    private HashSet<Integer> pastallocation;
 
     public Pokemon(double x, double y, double value, int type){
+        pastallocation=new HashSet<>();
         this.x = x;
         this.y = y;
         this.value=value;
@@ -26,6 +29,7 @@ public class Pokemon implements Comparable<Pokemon>{
         this.y=p.y;
         this.value=p.value;
         this.type=p.type;
+        this.pastallocation=p.pastallocation;
     }
 
     /**
@@ -124,4 +128,15 @@ public class Pokemon implements Comparable<Pokemon>{
         return this.Edest;
     }
 
+    public boolean containsPastAllocation(int id){
+        return pastallocation.contains(id);
+    }
+
+    public void addPastAllocation(int id){
+        pastallocation.add(id);
+    }
+
+    public int getPastSize(){
+        return this.pastallocation.size();
+    }
 }

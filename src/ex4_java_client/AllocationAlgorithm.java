@@ -3,10 +3,7 @@ package ex4_java_client;
 import datastructures.DWGraph;
 import datastructures.DijkstreeData;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.util.*;
 
 public class AllocationAlgorithm {
     private HashMap<Integer, AgentV1> agents;
@@ -14,7 +11,7 @@ public class AllocationAlgorithm {
     private HashMap<Integer, DijkstreeData> data;
     private DWGraph graph;
     private HashMap<Integer, LinkedList<Integer>> agentslog;
-    boolean flag=false;
+    boolean flag = false;
 
     public AllocationAlgorithm(DWGraph g, HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons, HashMap<Integer, DijkstreeData> data) {
         this.agents = agents;
@@ -44,10 +41,11 @@ public class AllocationAlgorithm {
             //if the pokemon already caught, we would like to remove the target of the agent before set a new one
             else if (!pokemons.containsKey(target.toString())) {
                 this.agents.get(a.getId()).removeTarget();
-            } else {
-                //if the agent reached his destination, prepare his next move
-                a.advanceNextMove();
             }
+//            else {
+////            if the agent reached his destination, prepare his next move
+//                a.advanceNextMove();
+//            }
         }
         HashMap<String, Pokemon> ret = new HashMap<>();
         Iterator<Pokemon> pokerator = pokemons.values().iterator();
@@ -65,74 +63,104 @@ public class AllocationAlgorithm {
     }
 
     public HashMap<Integer, AgentV1> AllocatePokemons() {
-        HashSet<Integer> realloc=new HashSet<>();
+        HashSet<Integer> realloc = new HashSet<>();
         HashMap<String, AgentV1> allocated = new HashMap<>();
         HashSet<AgentV1> alloc = new HashSet<>();
         for (AgentV1 a : this.agents.values()) {
-            Pokemon banned=null;
+            Pokemon banned = null;
             if (!a.isAvailable()) {
                 continue;
             }
-            if(System.currentTimeMillis()>a.getCatchTime()&&a.getCatchTime()!=-1){
-                banned=a.getTarget();
+            if (System.currentTimeMillis() > a.getCatchTime() && a.getCatchTime() != -1) {
+                banned = a.getTarget();
                 a.removeTarget();
+                if(agents.size()==1&&banned!=null){
+                    this.pokemons.remove(banned.toString());
+                }
             }
             int agentid = a.getId();
             String pokemonstr = " ";
             double mindist = Double.MAX_VALUE, speed = a.getSpeed();
-            for (Pokemon p : this.pokemons.values()) {
-//                if(a.getTarget()==p){
-//                    pokemonstr=" ";
-//                    break;
-//                }
-//                if a.getDest()!=-1) {
-//                    continue;
-//                }
-                if(banned!=null&&banned==p){
+            List<Pokemon> list=new LinkedList<>();
+            list.addAll(this.pokemons.values().stream().toList());
+            Collections.sort(list, new PokemonComparator());
+            for (Pokemon p : list) {
+
+                if (banned != null && banned == p) {
                     continue;
                 }
+
                 int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc(), id = a.getId();
-//                if (src == dest) {
-//                    continue;
-//                }
+
+                if (pokemons.size() >= agents.size()&&agents.size()>1&&a.getTarget()!=null) {
+                    if (a.getTarget()!=p&&p.containsPastAllocation(a.getId())) {
+                        continue;
+                    }
+                }
                 if (a.getTarget() == p) {
                     allocated.put(p.toString(), a);
                 }
+
                 double dist = (data.get(agentpos).distance.get(src) + this.graph.getEdge(src, dest).getWeight()) / speed;
                 if (dist < mindist) {
                     mindist = dist;
                     pokemonstr = p.toString();
                 }
             }
-            if (pokemonstr.equals(" ")) {
+
+            if(pokemonstr==" "){
                 continue;
             }
+
             Pokemon p = this.pokemons.get(pokemonstr);
-            if(this.agents.size()>1) {
+            if (this.agents.size() > 1) {
                 if (allocated.containsKey(p.toString())) {
                     int betterAgent = this.getBetterAgent(allocated.get(p.toString()), a, p);
+
                     if (betterAgent == allocated.get(p.toString()).getId()) {
                         continue;
                     }
+
                     a.removeTarget();
+                    if (this.agents.get(betterAgent).getTarget() != null) {
+                        Pokemon t = this.agents.get(betterAgent).getTarget();
+                        LinkedList setpath = data.get(a.getDest()).getPath(a.getDest(), t.getEsrc());
+                        double dis = this.data.get(a.getDest()).distance.get(t.getEsrc()) + this.graph.
+                                getEdge(t.getEsrc(), t.getEdest()).getWeight();
+                        long catcht = (long) (System.currentTimeMillis() + dis * 1000);
+
+                        a.setCatchTime(catcht);
+                        setpath.addLast(t.getEdest());
+                        a.setPath(setpath);
+                        a.setTarget(t);
+                        this.agents.put(a.getId(), a);
+                        alloc.remove(betterAgent);
+                        alloc.add(this.agents.get(a.getId()));
+                        allocated.put(p.toString(), a);
+                        p.addPastAllocation(a.getId());
+                        t.addPastAllocation(betterAgent);
+                    }
+                    a.advanceNextMove();
                     a = this.agents.get(betterAgent);
                 }
+            }
+            if(a.getTarget()==p){
+                continue;
             }
             a.setTarget(p);
             int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc();
             LinkedList<Integer> l = data.get(agentpos).getPath(agentpos, src);
-            long catchtime=(long)(System.currentTimeMillis()+mindist*1000);
+            long catchtime = (long) (System.currentTimeMillis() + mindist * 1000);
             a.setCatchTime(catchtime);
             l.addLast(dest);
             a.setPath(l);
             this.agents.put(a.getId(), a);
             alloc.add(this.agents.get(a.getId()));
             allocated.put(p.toString(), a);
+            p.addPastAllocation(a.getId());
+            a.advanceNextMove();
+            this.pokemons.remove(p.toString());
         }
-//        if(flag) {
-//            this.reallocateAgent(allocated, realloc);
-//        }
-//        flag=true;
         return this.agents;
     }
 
@@ -160,53 +188,13 @@ public class AllocationAlgorithm {
 
     public int getBetterAgent(AgentV1 agent1, AgentV1 agent2, Pokemon p) {
         int src1 = agent1.getSrc(), src2 = agent2.getSrc();
-        double dist1 = this.data.get(src2).distance.get(p.getEsrc()) + this.graph.getEdge(p.getEsrc(), p.getEdest()).getWeight();
+        double dist1 = this.data.get(src1).distance.get(p.getEsrc()) + this.graph.getEdge(p.getEsrc(), p.getEdest()).getWeight();
         double dist2 = this.data.get(src2).distance.get(p.getEsrc()) + this.graph.getEdge(p.getEsrc(), p.getEdest()).getWeight();
-        dist1=dist2/agent1.getSpeed();
-        dist2 = dist2/agent2.getSpeed();
-        if (dist1-0.4 > dist2) {
+        dist1 = dist1 / agent1.getSpeed();
+        dist2 = dist2 / agent2.getSpeed();
+        if (dist1 - 0.5 > dist2) {
             return agent2.getId();
         }
         return agent1.getId();
-    }
-
-    public void reallocateAgent(HashMap<String, AgentV1> allocated, HashSet<Integer> agents) {
-        for (Pokemon p : this.pokemons.values()) {
-            if (allocated.containsKey(p.toString())) {
-                continue;
-            }
-            double mindist = Double.MAX_VALUE;
-            int minid=-1;
-            AgentV1 bestAgent=this.agents.get(0);
-            for (int k : agents) {
-                AgentV1 a = this.agents.get(k);
-                double speed = a.getSpeed();
-                int id = a.getId();
-                String pokemonstr = " ";
-                if (!a.isAvailable()) {
-                    continue;
-                }
-                int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc();
-                if (src == dest) {
-                    continue;
-                }
-                if (a.getTarget() == p && checkifStuck(id)) {
-                    a.removeTarget();
-                }
-                double dist = (data.get(agentpos).distance.get(src) + this.graph.getEdge(src, dest).getWeight()) / speed;
-                if (dist < mindist) {
-                    mindist = dist;
-                    pokemonstr = p.toString();
-                    minid=a.getId();
-                    bestAgent=a;
-                }
-            }
-            bestAgent.setTarget(p);
-            int src = p.getEsrc(), dest = p.getEdest(), agentpos = bestAgent.getSrc();
-            LinkedList<Integer> l = data.get(agentpos).getPath(agentpos, src);
-            l.addLast(dest);
-            bestAgent.setPath(l);
-            this.agents.put(bestAgent.getId(), bestAgent);
-        }
     }
 }
