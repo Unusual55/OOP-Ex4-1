@@ -69,7 +69,8 @@ public class GameJson {
         final JSONObject obj2 = new JSONObject(infojson).getJSONObject("GameServer");
         double agents=Double.parseDouble(String.valueOf(obj2.getDouble("agents")));
         double grade=Double.parseDouble(String.valueOf(obj2.getDouble("grade")));
-        return new double[]{agents, grade};
+        double moves=Double.parseDouble(String.valueOf(obj2.getInt("moves")));
+        return new double[]{agents, grade, moves};
     }
 
 }

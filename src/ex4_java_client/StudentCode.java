@@ -36,8 +36,8 @@ public class StudentCode {
         HashMap<Integer, AgentV1> agents=gm.JsonToAgents(agentsStr);
         HashSet<Pokemon> pokemons=gm.JsonToPokemon(pokemonsStr);
         int time=Integer.parseInt(client.timeToEnd());
-        GuiThread gui=new GuiThread(graphStr);
-        gui.updateGui(time, agents, pokemons, data[1]);
+        GuiThread gui=new GuiThread(graphStr, client);
+        gui.updateGui(time, agents, pokemons, data[1], data[2]);
         client.start();
         while (client.isRunning().equals("true")) {
             agentsStr = client.getAgents();
@@ -46,7 +46,7 @@ public class StudentCode {
             pokemons=gm.JsonToPokemon(pokemonsStr);
             time=Integer.parseInt(client.timeToEnd());
             data=gm.JsonToInfo(client.getInfo());
-            gui.updateGui(time, agents, pokemons, data[1]);
+            gui.updateGui(time, agents, pokemons, data[1], data[2]);
 //            System.out.println(client.timeToEnd());
             for(AgentV1 a: agents.values()) {
                 if(!a.isAvailable()){continue;}

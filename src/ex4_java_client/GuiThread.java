@@ -6,29 +6,31 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class GuiThread extends Thread{
+    private Client client;
     private MainPanel mainPanel;
     private String graph;
     public GuiThread(int time, HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons, String graphJson) throws Exception {
         this.graph=graphJson;
         run();
-        this.updateGui(time, agents, pokemons, 0);
+        this.updateGui(time, agents, pokemons, 0, 0);
     }
 
-    public GuiThread(String graph){
+    public GuiThread(String graph, Client client){
+        this.client=client;
         this.graph=graph;
         run();
     }
     @Override
     public void run() {
         try {
-            this.mainPanel=new MainPanel(this.graph);
+            this.mainPanel=new MainPanel(this.graph, this.client);
             System.out.println("1");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public void updateGui(int time, HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons, double score){
-        this.mainPanel.UpdateGUI(time,score,agents,pokemons);
+    public void updateGui(int time, HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons, double score, double moves){
+        this.mainPanel.UpdateGUI(time,score,agents,pokemons, (int)moves);
     }
 }

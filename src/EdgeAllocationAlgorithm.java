@@ -38,10 +38,11 @@
 //                    continue;
 //                }
 //                if (((AgentV2) a).getGoal() != null) {
-//                    if (e.getValue() > ((AgentV2) a).getGoal().getValue() &&
-//                            this.data.get(a.getId()).distance.get(e.getSource()) < this.data.get(a.getSrc())
-//                                    .distance.get(((AgentV2) a).getGoal().getSource())) {
-//                        if(mindist>)
+//                    double edgeval=e.getValue(), agentval=((AgentV2) a).getGoal().getValue();
+//                    double aToGoal=this.data.get(a.getSrc()).distance.get(((AgentV2) a).getGoal().getSource());
+//                    double aToEdge=this.data.get(a.getSrc()).distance.get(e.getSource());
+//                    if (edgeval > agentval && aToGoal < aToEdge) {
+//                        if(mindist>this.data.get(a.getSrc()).distance.get(((AgentV2) a).getGoal().getSource())+)
 //
 //                    }
 //                }

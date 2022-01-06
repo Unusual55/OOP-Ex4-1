@@ -4,12 +4,15 @@ import datastructures.DWGraph;
 import datastructures.Edge;
 import datastructures.Vertex;
 import ex4_java_client.AgentV1;
+import ex4_java_client.Client;
 import ex4_java_client.Pokemon;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
@@ -23,7 +26,7 @@ import java.util.*;
  * parameters that we need in order to visualise better like the height and width of the main JFrame, the
  * remaining time and the current score. We used and improved functions from our third Assignment Ex2 in our GUI.
  */
-public class GraphDisplay extends JPanel {
+public class GraphDisplay extends JPanel implements MouseListener {
     final private double[] BoundingBox;
     final private DWGraph graph;
     private int height, width, time;
@@ -36,8 +39,12 @@ public class GraphDisplay extends JPanel {
     private HashMap<Integer, AgentV1> agents;
     private HashMap<String, VisPokemon> pokemons;
     final private PokeRandom pokeRandom;
+    private int moves;
+    private int[] X, Y;
+    private Client client;
 
-    public GraphDisplay(DWGraph g, int h, int w, JFrame frame) {
+    public GraphDisplay(DWGraph g, int h, int w, JFrame frame, Client client) {
+        this.client = client;
         this.BoundingBox = new double[4];
         this.graph = g;
         this.height = h;
@@ -48,6 +55,8 @@ public class GraphDisplay extends JPanel {
         this.agents = new HashMap<>();
         this.pokemons = new HashMap<>();
         this.pokeRandom = new PokeRandom();
+        this.setStopCoordinates();
+        this.addMouseListener(this);
     }
 
     /**
@@ -95,6 +104,7 @@ public class GraphDisplay extends JPanel {
         this.setSize(this.frame.getSize());
         this.width = this.frame.getWidth();
         this.height = this.frame.getHeight();
+        this.setStopCoordinates();
     }
 
     /**
@@ -165,16 +175,16 @@ public class GraphDisplay extends JPanel {
         BufferedImage image = ImageIO.read(file);
         RenderingHints rh = new RenderingHints(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.addRenderingHints(rh);
-        double scale=1;
+        double scale = 1;
         final double nW = image.getWidth() / scale, nH = image.getHeight() / scale;
-        g2d.drawImage(image, (int)(this.width/2 - nW/2), (int)(this.height/2 - nH/2), (int) nW, (int) nH, this);
+        g2d.drawImage(image, (int) (this.width / 2 - nW / 2), (int) (this.height / 2 - nH / 2), (int) nW, (int) nH, this);
         for (Vertex v : this.graph.nodes.values()) {
             double x = v.getX();
             double y = v.getY();
             double[] asrc = this.CoordinatesTransformation(v);
             Point2D src = new Point2D.Double(asrc[0], asrc[1]);
             g2d.setStroke(new BasicStroke(6f));
-            g2d.fillOval((int) (src.getX() - this.Wnode/2), (int) (src.getY() - this.Hnode/2), (int) this.Wnode, (int) this.Hnode);
+            g2d.fillOval((int) (src.getX() - this.Wnode / 2), (int) (src.getY() - this.Hnode / 2), (int) this.Wnode, (int) this.Hnode);
             g2d.setColor(Color.RED);
             g2d.drawString("" + v.getID(), (int) src.getX(), (int) src.getY());
             g2d.setColor(Color.BLACK);
@@ -205,7 +215,7 @@ public class GraphDisplay extends JPanel {
             double[] coor = CoordinatesTransformation(x, y);
             File file = new File("Media/MasterBall.png");
             BufferedImage image = ImageIO.read(file);
-            double scale=20;
+            double scale = 20;
             final double nW = this.width / scale, nH = this.height / scale;
             g2d.drawImage(image, (int) (coor[0] - nW / 2), (int) (coor[1] - nH / 2), (int) nW, (int) nH, this);
         }
@@ -223,7 +233,7 @@ public class GraphDisplay extends JPanel {
     public void drawPokemons(Graphics g) throws IOException {
         Graphics2D g2d = (Graphics2D) g;
         for (VisPokemon pikachu : this.pokemons.values()) {
-            if(pikachu==null){
+            if (pikachu == null) {
                 System.out.println("here");
             }
             double x = pikachu.getX();
@@ -243,7 +253,7 @@ public class GraphDisplay extends JPanel {
     }
 
     /**
-     * This fuction draw the remaining time for the simulation at the left upper corner of the screen
+     * This fuction draw the remaining time for the simulation at the left lower corner of the screen
      *
      * @param g
      */
@@ -252,8 +262,8 @@ public class GraphDisplay extends JPanel {
         int afterdecimal = (int) (this.mod(time, 1000));
         int predecimal = (int) (time / 1000);
         float x = (float) ((1. / 40) * (this.width));
-        float y = (float) ((2. / 20) * (this.height));
-        g2d.drawString(predecimal + ":" + afterdecimal, x, y);
+        float y = (float) ((18. / 20) * (this.height));
+        g2d.drawString("Time: " + predecimal + ":" + afterdecimal, x, y);
     }
 
     /**
@@ -267,15 +277,69 @@ public class GraphDisplay extends JPanel {
         repaint();
     }
 
+    public void updateMoves(int moves) {
+        this.moves = moves;
+        repaint();
+    }
+
     /**
-     * This function draw the score on the left upper corner of the screen
+     * This function draw the score on the left lower corner of the screen
      *
      * @param g
      */
     public void drawScore(Graphics g) {
         Graphics2D g2d = (Graphics2D) g;
-        float x = (float) ((1. / 40) * (this.width));
-        float y = (float) ((1. / 20) * (this.height));
+        float x = (float) ((13. / 40) * (this.width));
+        float y = (float) ((18. / 20) * (this.height));
+        g2d.drawString("Moves: " + moves, x, y);
+    }
+
+    public void setStopCoordinates() {
+        float x1 = (float) ((32. / 40.) * (this.width));
+        float y1 = (float) ((17. / 20.) * (this.height));
+
+        float x2 = (float) ((32. / 40.) * (this.width));
+        float y2 = (float) ((19. / 20.) * (this.height));
+
+        float x3 = (float) ((36. / 40.) * (this.width));
+        float y3 = (float) ((19. / 20.) * (this.height));
+
+        float x4 = (float) ((36. / 40.) * (this.width));
+        float y4 = (float) ((17. / 20.) * (this.height));
+
+        int[] X = {(int) x1, (int) x2, (int) x3, (int) x4};
+        int[] Y = {(int) y1, (int) y2, (int) y3, (int) y4};
+        this.X = X;
+        this.Y = Y;
+    }
+
+    /**
+     * This function draw the button on the right lower corner of the screen
+     *
+     * @param g
+     */
+    public void drawStop(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setColor(Color.GRAY);
+        Polygon p = new Polygon();
+        p.xpoints = this.X;
+        p.ypoints = this.Y;
+        g2d.fillPolygon(this.X, this.Y, 4);
+        g2d.setColor(Color.BLACK);
+        g2d.drawPolygon(this.X, this.Y, 4);
+        g2d.setColor(Color.RED);
+        g2d.drawString("Stop", (int) ((134. / 160.) * (this.width)), (int) ((36. / 40.) * this.height));
+    }
+
+    /**
+     * This function draw the moves counter on the left lower corner of the screen
+     *
+     * @param g
+     */
+    public void drawMoves(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        float x = (float) ((7. / 40) * (this.width));
+        float y = (float) ((18. / 20) * (this.height));
         g2d.drawString("Score: " + score, x, y);
     }
 
@@ -332,6 +396,8 @@ public class GraphDisplay extends JPanel {
             this.drawPokemons(g);
             this.drawTime(g);
             this.drawScore(g);
+            this.drawMoves(g);
+            this.drawStop(g);
         } catch (IOException e) {
             System.out.println("something went wrong");
         }
@@ -398,7 +464,7 @@ public class GraphDisplay extends JPanel {
         double dcy = this.BoundingBox[3] - y;
         double xfixed = (dcx / dpx * this.width * 0.8);
         double yfixed = (dcy / dpy * this.height * 0.8);
-        return new double[]{xfixed+20, yfixed+20};
+        return new double[]{xfixed + 20, yfixed + 20};
     }
 //
 //    public double[] CoordinatesTransformation(double x, double y, Image image) {
@@ -444,7 +510,7 @@ public class GraphDisplay extends JPanel {
     public void pokemonUpdate(HashSet<Pokemon> newset) {
         HashMap<String, VisPokemon> ret = new HashMap<>();
         Iterator<Pokemon> pokerator = newset.iterator();
-        Set<String> pokeset=this.pokemons.keySet();
+        Set<String> pokeset = this.pokemons.keySet();
         while (pokerator.hasNext()) {
             Pokemon p = pokerator.next();
             if (this.pokemons.containsKey(p.toString())) {
@@ -463,14 +529,47 @@ public class GraphDisplay extends JPanel {
      * @param agents
      */
     public void updateAgents(HashMap<Integer, AgentV1> agents) {
-        if(agents.size()>this.agents.size()){
-            this.agents=agents;
+        if (agents.size() > this.agents.size()) {
+            this.agents = agents;
             return;
         }
         for (int id : agents.keySet()) {
-            AgentV1 a=agents.get(id);
+            AgentV1 a = agents.get(id);
             this.agents.get(id).update(a);
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        Polygon p = new Polygon();
+        p.xpoints = this.X;
+        p.ypoints = this.Y;
+        p.npoints = 4;
+        int Xmouse = e.getX();
+        int Ymouse = e.getY();
+        Point2D click = new Point2D.Double(Xmouse, Ymouse);
+        if (p.contains(click)) {
+            if (client.isRunning().equals("true")) {
+                client.stop();
+                System.exit(1);
+            }
+        }
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
     }
 }
 

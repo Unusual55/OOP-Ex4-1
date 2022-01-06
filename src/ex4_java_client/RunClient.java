@@ -39,8 +39,8 @@ public class RunClient {
         HashMap<Integer, AgentV1> agents = gm.JsonToAgents(agentsStr);
         int time = Integer.parseInt(client.timeToEnd());
         AllocationAlgorithm allocAlgo = new AllocationAlgorithm(g, agents, pokemons, data);
-        GuiThread gui = new GuiThread(graphStr);
-        gui.updateGui(time, agents, pokemons, score);
+        GuiThread gui = new GuiThread(graphStr, client);
+        gui.updateGui(time, agents, pokemons, score, 0);
         LinkedList<Long> log = new LinkedList<>();
         client.start();
         String pokemonStr2 = "";
@@ -56,7 +56,7 @@ public class RunClient {
             allocAlgo.update(agents, pokemons);
             agents = allocAlgo.AllocatePokemons();
             int MoveCounter = 0;
-            gui.updateGui(time, agents, pokemons, infoArray[1]);
+            gui.updateGui(time, agents, pokemons, infoArray[1], infoArray[2]);
             for (AgentV1 a : agents.values()) {
                 if (!a.isAvailable()) {
                     continue;
@@ -96,7 +96,7 @@ class MoveTask extends Thread {
     @Override
     public void run() {
         try {
-            Thread.sleep(100);
+            Thread.sleep(98);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
