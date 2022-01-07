@@ -66,7 +66,7 @@ public class RunClient {
 //                }
                 String Move = allocAlgo.AgentNextMove(a.getId());
                 client.chooseNextEdge(Move);
-                System.out.println(Move);
+//                System.out.println(Move);
                 MoveCounter++;
             }
             mt.run();
@@ -96,7 +96,7 @@ class MoveTask extends Thread {
     @Override
     public void run() {
         try {
-            Thread.sleep(98);
+            Thread.sleep(99);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -11,10 +11,12 @@ public class AllocationAlgorithm {
     private HashMap<Integer, DijkstreeData> data;
     private DWGraph graph;
     private HashMap<Integer, LinkedList<Integer>> agentslog;
+    private HashSet<Double> SPEED;
     boolean flag = false;
 
     public AllocationAlgorithm(DWGraph g, HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons, HashMap<Integer, DijkstreeData> data) {
         this.agents = agents;
+        this.SPEED=new HashSet<>();
         this.data = data;
         this.graph = g;
         this.pokemons = new HashMap<>();
@@ -29,10 +31,12 @@ public class AllocationAlgorithm {
 
     public void update(HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemon) {
         HashMap<String, Pokemon> pokemons = new HashMap<>();
+        SPEED=new HashSet<>();
         for (Pokemon p : pokemon) {
             pokemons.put(p.toString(), p);
         }
         for (AgentV1 a : agents.values()) {
+            SPEED.add(a.getSpeed());
             this.agents.get(a.getId()).update(a);
             Pokemon target = this.agents.get(a.getId()).getTarget();
             if (target == null) {//if the agent target was caught or not allocated yet
@@ -63,6 +67,9 @@ public class AllocationAlgorithm {
     }
 
     public HashMap<Integer, AgentV1> AllocatePokemons() {
+        if(SPEED.size()==1){
+            System.out.println("speed: " + SPEED);
+        }
         HashSet<Integer> realloc = new HashSet<>();
         HashMap<String, AgentV1> allocated = new HashMap<>();
         HashSet<AgentV1> alloc = new HashSet<>();
@@ -83,7 +90,6 @@ public class AllocationAlgorithm {
             double mindist = Double.MAX_VALUE, speed = a.getSpeed();
             List<Pokemon> list=new LinkedList<>();
             list.addAll(this.pokemons.values().stream().toList());
-            Collections.sort(list, new PokemonComparator());
             for (Pokemon p : list) {
 
                 if (banned != null && banned == p) {
@@ -92,7 +98,7 @@ public class AllocationAlgorithm {
 
                 int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc(), id = a.getId();
 
-                if (pokemons.size() >= agents.size()&&agents.size()>1&&a.getTarget()!=null) {
+                if (pokemons.size() <= agents.size()&&agents.size()>1&&a.getTarget()!=null) {
                     if (a.getTarget()!=p&&p.containsPastAllocation(a.getId())) {
                         continue;
                     }
@@ -117,7 +123,7 @@ public class AllocationAlgorithm {
                 if (allocated.containsKey(p.toString())) {
                     int betterAgent = this.getBetterAgent(allocated.get(p.toString()), a, p);
 
-                    if (betterAgent == allocated.get(p.toString()).getId()) {
+                    if (betterAgent == allocated.get(p.toString()).getId()){
                         continue;
                     }
 
@@ -150,7 +156,7 @@ public class AllocationAlgorithm {
             a.setTarget(p);
             int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc();
             LinkedList<Integer> l = data.get(agentpos).getPath(agentpos, src);
-            long catchtime = (long) (System.currentTimeMillis() + mindist * 1000);
+            long catchtime = (long) (System.currentTimeMillis() + 500 + mindist * 1000);
             a.setCatchTime(catchtime);
             l.addLast(dest);
             a.setPath(l);
@@ -159,7 +165,7 @@ public class AllocationAlgorithm {
             allocated.put(p.toString(), a);
             p.addPastAllocation(a.getId());
             a.advanceNextMove();
-            this.pokemons.remove(p.toString());
+//            this.pokemons.remove(p.toString());
         }
         return this.agents;
     }
@@ -188,11 +194,17 @@ public class AllocationAlgorithm {
 
     public int getBetterAgent(AgentV1 agent1, AgentV1 agent2, Pokemon p) {
         int src1 = agent1.getSrc(), src2 = agent2.getSrc();
+        if(agent1.getDest()!=-1){
+            src1=agent1.getDest();
+        }
+        if(agent2.getDest()!=-1){
+            src2=agent2.getDest();
+        }
         double dist1 = this.data.get(src1).distance.get(p.getEsrc()) + this.graph.getEdge(p.getEsrc(), p.getEdest()).getWeight();
         double dist2 = this.data.get(src2).distance.get(p.getEsrc()) + this.graph.getEdge(p.getEsrc(), p.getEdest()).getWeight();
         dist1 = dist1 / agent1.getSpeed();
         dist2 = dist2 / agent2.getSpeed();
-        if (dist1 - 0.5 > dist2) {
+        if (dist1 - 0.2 > dist2) {
             return agent2.getId();
         }
         return agent1.getId();
