@@ -46,10 +46,7 @@ public class AllocationAlgorithm {
             else if (!pokemons.containsKey(target.toString())) {
                 this.agents.get(a.getId()).removeTarget();
             }
-//            else {
-////            if the agent reached his destination, prepare his next move
-//                a.advanceNextMove();
-//            }
+
         }
         HashMap<String, Pokemon> ret = new HashMap<>();
         Iterator<Pokemon> pokerator = pokemons.values().iterator();

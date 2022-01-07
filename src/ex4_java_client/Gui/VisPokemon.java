@@ -19,7 +19,12 @@ public class VisPokemon extends Pokemon {
 
     public VisPokemon(String path, Pokemon p){
         super(p);
-        this.Path="Media/sprites/"+path;
+        if(p.type()==1) {
+            this.Path = "Media/sprites/" + path;
+        }
+        else{
+            this.Path = "Media/sprites/shiny/" + path;
+        }
     }
 
     /**
