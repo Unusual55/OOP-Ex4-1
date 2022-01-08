@@ -3,7 +3,8 @@
 Assignment 4 for the course Object-Oriented Programming written and programmed by Ofri Tavor and Nir Sasson.
 
 ## Overview
-In this project we were tasked
+
+In this project we were tasked to create a multi-agent algorithm which can connect to a remote server and using the given API collect the most targets in the given setup.
 
 ## Getting Started
 
@@ -38,29 +39,43 @@ Follow the steps in order to clone the project and install the required dependen
     ```
 
     [Gson jar downloads](https://maven-badges.herokuapp.com/maven-central/com.google.code.gson/gson) are available from Maven Central.
+    
+3. This project also uses and requires the library [JGraphT](https://jgrapht.org/):
+
+    Maven:
+
+    ```xml
+    <dependency>
+        <groupId>org.jgrapht</groupId>
+        <artifactId>jgrapht-core</artifactId>
+        <version>1.5.1</version>
+    </dependency>
+    ```
 
 ### Usage
 
-In order to run the graphical user interface run the following command into the teminal:
+In order to run the server run the following command into the terminal:
 
 ```bash
-java -jar ./path/to/jar/Ex2.jar ./path/to/json/Graph.json
+java -jar ./path/to/jar/Ex4_Server_v0.0.jar [CASE_NUMBER 0-15]
 ```
 
-Which will open and load the specified json into the GUI.
+And in order to run the graphical interface in a seprate terminal run run the command:
+
+```bash
+java -jar ./path/to/jar/Ex4.jar
+```
+
+Which will open and load the specified case into the GUI.
 
 ## Documentation
 
 For more information and details about the structure and background of the project please refer to the [Wiki Pages](../../wiki).
 
-## Comparison and Stats
-
-These results ran on a laptop with the following CPU: AMD Ryzen 5 3500U with Radeon Vega Mobile Gfx (8 CPUs), ~2.1 GHz, 12 GB RAM.
-
-### The GUI
-
-
 ### Results
+
+These results ran on a laptop with the following CPU: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz, 2803 Mhz, 4 Core(s), 8 Logical Processor(s) 
+
 case 0:
 ```json
 {"GameServer":{"pokemons":1,"is_logged_in":false,"moves":292,"grade":147,"game_level":0,"max_user_level":-1,"id":0,"graph":"data/A0","agents":1}}
