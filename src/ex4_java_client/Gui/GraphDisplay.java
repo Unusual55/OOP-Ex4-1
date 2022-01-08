@@ -218,6 +218,9 @@ public class GraphDisplay extends JPanel implements MouseListener {
             double scale = 20;
             final double nW = this.width / scale, nH = this.height / scale;
             g2d.drawImage(image, (int) (coor[0] - nW / 2), (int) (coor[1] - nH / 2), (int) nW, (int) nH, this);
+            g2d.setColor(Color.BLUE);
+            g2d.drawString("Id: " +String.valueOf(agent.getId()), (int) (coor[0] - nW / 2), (int) (coor[1] - nH / 2));
+            g2d.setColor(Color.BLACK);
         }
     }
 
@@ -248,6 +251,10 @@ public class GraphDisplay extends JPanel implements MouseListener {
             }
             final double nW = this.width / scale, nH = this.height / scale;
             g2d.drawImage(image, (int) (coor[0] - nW / 2), (int) (coor[1] - nH / 2), (int) nW, (int) nH, this);
+            g2d.setColor(Color.BLUE);
+            g2d.drawString("type: "+String.valueOf(pikachu.type()) +" values: "+String.valueOf
+                    (pikachu.getValue()),(int) (coor[0] - nW / 2), (int) (coor[1] - nH / 2) );
+            g2d.setColor(Color.BLACK);
         }
     }
 
