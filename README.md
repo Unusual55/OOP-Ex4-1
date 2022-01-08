@@ -141,7 +141,7 @@ case 15:
 {"GameServer":{"pokemons":4,"is_logged_in":false,"moves":588,"grade":375,"game_level":15,"max_user_level":-1,"id":0,"graph":"data/A3","agents":1}}
 ```
 <center>
-<img src="https://github.com/SassonNir/OOP-Ex4/blob/main/396a880f-e5c0-48d0-8ee4-b6c822913fae.gif" width="480" height="400" class="centerImage">
+<img src="https://github.com/SassonNir/OOP-Ex4/blob/main/396a880f-e5c0-48d0-8ee4-b6c822913fae.gif" width="480" height="400" class="centerImage" text="Authorede by Ofri Tavor and Nir Sasson">
 </center>
 
 ## Literature for review:
