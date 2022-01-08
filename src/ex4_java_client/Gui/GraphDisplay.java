@@ -60,42 +60,6 @@ public class GraphDisplay extends JPanel implements MouseListener {
     }
 
     /**
-     * This function get a map of agents and set of pokemon and set them as the current pokemon and agents for
-     * the simulation in the beginning of the simulation
-     *
-     * @param agents
-     * @param pokemons
-     */
-    public void setPokemons(HashMap<Integer, AgentV1> agents, HashMap<Pokemon, Pokemon> pokemons) {
-        this.agents = agents;
-        for (Pokemon p : pokemons.values()) {
-            VisPokemon visualp = new VisPokemon(pokeRandom.randompokemon(), p);
-            this.pokemons.put(p.toString(), visualp);
-        }
-    }
-
-    /**
-     * This function get an Agent as an input and add it to our agents map. We used this function mainly for
-     * testing the GUI.
-     *
-     * @param a
-     */
-    public void addAgent(AgentV1 a) {
-        this.agents.put(a.getId(), a);
-    }
-
-    /**
-     * This function get an Pokemon as an input and add it to our pokemon map. We used this function mainly for
-     * testing the GUI.
-     *
-     * @param p
-     */
-    public void addPokemon(Pokemon p) {
-        VisPokemon visp = new VisPokemon(pokeRandom.randompokemon(), p);
-        this.pokemons.put(p.toString(), visp);
-    }
-
-    /**
      * This function relate to the MainPanel Resize event. When the user resize the window, we will set the
      * GraphDisplay bounds and size it it will match the MainPanel.
      */

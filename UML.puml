@@ -1,0 +1,266 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface AbstractNode{
++getValue
++setValue
++getID
++setID
++toJSON
+}
+
+interface AbstractEdge{
++getSource
++setWeight
++getDestination
++setDestination
++getWeight
++setSource
++toJSON
+}
+
+class Node implements AbstractNode{
+-id: int
+-value: double
++equals(Object): Boolean
++toString(): String
++hashCode(): int
++compareTo(AbstractNode): int
++getValue(): double
++setValue(double): AbstractNode
++getID(): int
++setID(int): AbstractNode
++toJSON(): JSONObject
+}
+
+class Vertex extends Node{
+-x: double
+-y: double
+-z: double
++equals(Object): Boolean
++toString(): String
++hashCode(): int
++distance(double, double, double): double
++distance(Vertex): double
++distance(): double
++getZ(): double
++setZ(double): Vertex
++setXYZ(double, double, double): Vertex
++setXYZ(Vertex): Vertex
++setXYZ(String, String, String): Vertex
++setXYZ(String, String): Vertex
++setXYZ(String): Vertex
++getX(): double
++getY(): double
++getXYZString(): String
++getXYZString(String): String
++setX(double): Vertex
++setY(double): Vertex
++squaredDistance(double, double, double): double
++squaredDistance(Vertex): double
++squaredDistance(): double
++toJSON(): JSONObject
++getXYZ(): double[]
+}
+
+class Edge implements AbstractEdge{
+-src: int
+-dest: int
+-type: int
+-weight: double
+-value: double
++equals(Object): Boolean
++toString(): String
++hashCode(): int
++getValue(): double
++getType(): int
++getSource(): int
++setSource(int): AbstractEdge
++setWeight(double): AbstractEdge
++getWeight(): double
++getDestination(): int
++updateValue(double): void
++toJSON(): JSONObject
++resetValue(): void
++setDestination(int): AbstractEdge
+}
+
+class EdgeComparator{
++compare(Edge, Edge): int
+}
+
+class DWGraph{
++graph: SimpleDirectedWeightedGraph<Integer, Edge>
++nodes: HashMap<Integer, Vertex>
++getNode(int): Vertex
++removeNode(int): Boolean
++getEdge(int, int): Edge
++removeEdge(int, int): Boolean
++addEdge(int, int, double): Boolean
++getAllEdges(): Set<Edge>
++resetEdgesValues(): void
++findWantedEdge(Pokemon): int[]
++addNode(Vertex): Boolean
+}
+
+class GraphAlgo{
+-graph: DWGraph
++getGraph(): DWGraph
++loadGraph(String): Boolean
++Dijkstra(int): DijkstreeData
++Center(): Pair<Integer, HashMap<Integer, DijkstreeData>>
+}
+
+class DijkstreeData{
++distance: HashMap<Integer, Double>
++path: HashMap<Integer, Integer>
++getPath(int, int): LinkedList<Integer>
+}
+
+class JsonControl{
++g: DWGraph
++load(String): void
++loadGraphJson(String): void
+}
+
+class AgentV1{
+-id: int
+-score: double
+-currentscore: double
+-src: int
+-dest: int
+-speed: double
+-x: double
+-y: double
+-target: Pokemon
+-VictoryRoad: LinkedList>Integer
+-catchtime: long
++update(AgentV1): void
++getId(): int
++getTarget(): Pokemon
++setTarget(Pokemon): void
++getScore(): double
++setScore(double): void
++getX(): double
++setSrc(int): void
++getDest(): int
++setDest(int): void
++getSrc(): int
++getSpeed(): double
++advanceNextMove(): void
++getCatchTime(): long
++getY(): double
++setId(int): void
++setSpeed(double): void
++setX(double): void
++setY(double): void
++setCatchTime(long): void
++setPath(LinkedList<Integer>): void
++getNextMove(): int
++removeTarget(): void
++isAvailable(): Boolean
+}
+
+class Pokemon{
+-value: double
+-x: double
+-y: double
+-type: int
+-Esrc: int
+-Edest: int
+-pastallocation: HashSet<Integer>
++type(): int
++equals(Object): Boolean
++toString(): String
++compareTo(Pokemon): int
++getValue(): double
++updateIndexes(int[]): void
++setEsrc(int): void
++getX(): double
++setEdest(int): void
++getY(): double
++getEsrc(): int
++getPastSize(): int
++addPastAllocation(int): void
++getEdest(): int
++containsPastAllocation(int): Boolean
+}
+
+class PokemonComparator{
++compare(Pokemon, Pokemon): int
+}
+
+class GameJson{
+-graph: DWGraph
++JsonToAgents(String): HashMap<Integer, AgentV1>
++JsonToPokemon(String): HashSet<Pokemon>
++JsonToInfo(String): double[]
+}
+
+class PositioningAlgorithms{
+-instance: static int
++get Position(int, int, HashSet<Pokemon>, Set<Edge>): HashMap<Integer, Integer>
+-setPosition(int, int, HashSet<Pokemon>, Set<Edge>): HashMap<Integer, Integer>
+}
+
+class AllocationAlgorithm{
+-agents: HashMap<Integer, AgentV1>
+-pokemons: HashMap<String, Pokemon>
+-data: HashMap<Integer, DijkstreeData>
+-graph: DWGraph
+-agentslog: HashMap<Integer, LinkedList<Integer>>
+-SPEED: HashSet<double>
++update(HashMap<Integer, AgentV1>, HashSet<Pokemon>): void
++AllocatePokemons(): HashMap<Integer, AgentV1>
++AgentNextMove(int): String
++getBetterAgent(AgentV1, AgentV1, Pokemon): int
+}
+
+class VisPokemon extends Pokemon{
+-path: String
++getPath(): String
+}
+
+class PokeRandom{
+-pokeAmount: final int
+-rnd: Random
++randompokemon(): String
+}
+
+class MainPanel{
++UpdateGUI(int, double, HashMap<Integer, AgentV1>, HashSet<Pokemon>, int): void
+}
+
+class GraphDisplay{
++Resize(): void
++drawArrow(Graphics2D, Point2D, Point2D,Stroke, Stroke, int): void
++drawGraph(Graphics): void
++drawAgents(Graphics): void
++drawPokemons(Graphics): void
++drawTime(Graphics): void
++updateTime(int): void
++updateMoves(int): void
++drawScore(Graphics): void
++setStopCoordinates(): void
++drawStop(Graphics): void
++drawMoves(int): void
++updateScore(int): void
++mod(int, int): int
++paint(Graphics): void
++paintComponent(Graphics): void
++CoordinatesTransformation(Vertex): double[]
++CoordinatesTransformation(double, double): double[]
++music(): void
++pokemonUpdate(HashSet<Pokemon>): void
++updateAgents(HashMap<Integer, AgentV1>): void
++mouseClicked(MouseEvent): void
+}
+
+class GuiThread{
+-client: Client
+-mainPanel: MainPanel
+-graph: String
++run(): void
++updateGui(int, HashMap<Integer, AgentV1>, HashSet<Pokemon>, double, double): void
+}
+@enduml

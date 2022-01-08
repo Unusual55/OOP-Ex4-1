@@ -16,7 +16,6 @@ public class AllocationAlgorithm {
     private DWGraph graph;
     private HashMap<Integer, LinkedList<Integer>> agentslog;
     private HashSet<Double> SPEED;
-    boolean flag = false;
 
     public AllocationAlgorithm(DWGraph g, HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemons, HashMap<Integer, DijkstreeData> data) {
         this.agents = agents;

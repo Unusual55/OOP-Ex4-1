@@ -16,30 +16,12 @@ import java.util.Random;
  * photo of a random pokemon or a suprise super legendary pokemon.
  */
 public class PokeRandom {
-    private HashMap<Integer, String> pokemap;
-    private static final double boazProb = 0.1;
     private static final int pokeAmount = 898;
-    private final Random rnd = new Random();
+    private Random rnd;
 
 
     public PokeRandom() {
-        pokemap = new HashMap<>();
-        try {
-            final JsonParser obj = new JsonParser();
-            File file = new File("Media/all.json");
-            FileReader fr = new FileReader(file);
-            JsonReader jr = new JsonReader(fr);
-            JsonElement je = obj.parse(jr);
-            final JsonArray pokarray = je.getAsJsonObject().getAsJsonArray("All");
-            for (int i = 0; i < pokarray.size(); i++) {
-                final JsonElement pokemon = pokarray.get(i);
-
-                int id = pokarray.get(i).getAsJsonObject().get("id").getAsJsonPrimitive().getAsInt();
-                pokemap.put(id, String.valueOf(id) + ".png");
-            }
-        } catch (Exception e) {
-            System.out.println("1");
-        }
+        rnd=new Random();
     }
 
     /**
