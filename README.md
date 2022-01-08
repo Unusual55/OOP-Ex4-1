@@ -1,2 +1,142 @@
-# OOP-Ex4
-Nir Sasson and Ofri Tavor's repository for Assignment 4 in OOP course
+# Assignment 4
+
+Assignment 4 for the course Object-Oriented Programming written and programmed by Ofri Tavor and Nir Sasson.
+
+## Overview
+
+In this project we were tasked to create a multi-agent algorithm which can connect to a remote server and using the given API collect the most targets in the given setup.
+
+## Getting Started
+
+### Installation
+
+Follow the steps in order to clone the project and install the required dependencies:
+
+1. Clone the repo
+
+   ```sh
+   git clone https://github.com/SassonNir/OOP-Ex4.git
+   ```
+
+2. This project uses and requires the [Google's serialization/deserialization library for JSON in Java called gson](https://github.com/google/gson):
+
+   Gradle:
+
+    ```gradle
+    dependencies {
+        implementation 'com.google.code.gson:gson:2.8.9'
+    }
+    ```
+
+   Maven:
+
+    ```xml
+    <dependency>
+        <groupId>com.google.code.gson</groupId>
+        <artifactId>gson</artifactId>
+        <version>2.8.9</version>
+    </dependency>
+    ```
+
+   [Gson jar downloads](https://maven-badges.herokuapp.com/maven-central/com.google.code.gson/gson) are available from Maven Central.
+
+3. This project also uses and requires the library [JGraphT](https://jgrapht.org/):
+
+   Maven:
+
+    ```xml
+    <dependency>
+        <groupId>org.jgrapht</groupId>
+        <artifactId>jgrapht-core</artifactId>
+        <version>1.5.1</version>
+    </dependency>
+    ```
+
+### Usage
+
+In order to run the server run the following command into the terminal:
+
+```bash
+java -jar ./path/to/jar/Ex4_Server_v0.0.jar [CASE_NUMBER 0-15]
+```
+
+And in order to run the graphical interface in a seprate terminal run run the command:
+
+```bash
+java -jar ./path/to/jar/Ex4.jar
+```
+
+Which will open and load the specified case into the GUI.
+
+## Documentation
+
+For more information and details about the structure and background of the project please refer to the [Wiki Pages](../../wiki).
+
+### Results
+
+These results ran on a laptop with the following CPU: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz, 2803 Mhz, 4 Core(s), 8 Logical Processor(s)
+
+case 0:
+```json
+{"GameServer":{"pokemons":1,"is_logged_in":false,"moves":292,"grade":147,"game_level":0,"max_user_level":-1,"id":0,"graph":"data/A0","agents":1}}
+```
+case 1:
+```json
+{"GameServer":{"pokemons":2,"is_logged_in":false,"moves":585,"grade":543,"game_level":1,"max_user_level":-1,"id":0,"graph":"data/A0","agents":1}}
+```
+case 2:
+```json
+{"GameServer":{"pokemons":3,"is_logged_in":false,"moves":292,"grade":275,"game_level":2,"max_user_level":-1,"id":0,"graph":"data/A0","agents":1}}
+```
+case 3:
+```json
+{"GameServer":{"pokemons":4,"is_logged_in":false,"moves":586,"grade":911,"game_level":3,"max_user_level":-1,"id":0,"graph":"data/A0","agents":1}}
+```
+case 4:
+```json
+{"GameServer":{"pokemons":5,"is_logged_in":false,"moves":291,"grade":262,"game_level":4,"max_user_level":-1,"id":0,"graph":"data/A1","agents":1}}
+```
+case 5:
+```json
+{"GameServer":{"pokemons":6,"is_logged_in":false,"moves":589,"grade":851,"game_level":5,"max_user_level":-1,"id":0,"graph":"data/A1","agents":1}}
+```
+case 6:
+```json
+{"GameServer":{"pokemons":1,"is_logged_in":false,"moves":293,"grade":79,"game_level":6,"max_user_level":-1,"id":0,"graph":"data/A1","agents":1}}
+```
+case 7:
+```json
+{"GameServer":{"pokemons":2,"is_logged_in":false,"moves":588,"grade":396,"game_level":7,"max_user_level":-1,"id":0,"graph":"data/A1","agents":1}}
+```
+case 8:
+```json
+{"GameServer":{"pokemons":3,"is_logged_in":false,"moves":292,"grade":130,"game_level":8,"max_user_level":-1,"id":0,"graph":"data/A2","agents":1}}
+```
+case 9:
+```json
+{"GameServer":{"pokemons":4,"is_logged_in":false,"moves":587,"grade":516,"game_level":9,"max_user_level":-1,"id":0,"graph":"data/A2","agents":1}}
+```
+case 10:
+```json
+{"GameServer":{"pokemons":5,"is_logged_in":false,"moves":292,"grade":210,"game_level":10,"max_user_level":-1,"id":0,"graph":"data/A2","agents":1}}
+```
+case 11:
+```json
+{"GameServer":{"pokemons":6,"is_logged_in":false,"moves":587,"grade":1768,"game_level":11,"max_user_level":-1,"id":0,"graph":"data/A2","agents":3}}
+```
+case 12:
+```json
+{"GameServer":{"pokemons":1,"is_logged_in":false,"moves":292,"grade":40,"game_level":12,"max_user_level":-1,"id":0,"graph":"data/A3","agents":1}}
+```
+case 13:
+```json
+{"GameServer":{"pokemons":2,"is_logged_in":false,"moves":581,"grade":363,"game_level":13,"max_user_level":-1,"id":0,"graph":"data/A3","agents":2}}
+```
+case 14:
+```json
+{"GameServer":{"pokemons":3,"is_logged_in":false,"moves":291,"grade":246,"game_level":14,"max_user_level":-1,"id":0,"graph":"data/A3","agents":3}}
+```
+case 15:
+```json
+{"GameServer":{"pokemons":4,"is_logged_in":false,"moves":588,"grade":375,"game_level":15,"max_user_level":-1,"id":0,"graph":"data/A3","agents":1}}
+```
