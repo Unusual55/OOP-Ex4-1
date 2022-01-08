@@ -143,3 +143,15 @@ case 15:
 <center>
 <img src="https://github.com/SassonNir/OOP-Ex4/blob/main/396a880f-e5c0-48d0-8ee4-b6c822913fae.gif" width="480" height="400" class="centerImage">
 </center>
+
+## Literature for review:
+1. https://www.youtube.com/watch?v=Kmgo00avvEw&t=16173s
+2. https://www.youtube.com/watch?v=tWVWeAqZ0WU
+3. https://www.youtube.com/watch?v=Bk1GmENOvrQ
+4. <cite>Jäger, G. & Goldengorin, Boris. (2005). How to make a greedy heuristic for the asymmetric traveling salesman problem competitive. University of Groningen, Research Institute SOM (Systems, Organisations and Management), Research Report.</cite>
+https://www.researchgate.net/publication/4768411_How_to_make_a_greedy_heuristic_for_the_asymmetric_traveling_salesman_problem_competitive
+
+5. <cite>Gonzalez, A. (2020). A parallel implementation of a greedy TSP algorithm (Unpublished thesis). Texas State University, San Marcos, Texas.</cite>
+https://digital.library.txstate.edu/handle/10877/12922
+
+6. https://www.youtube.com/watch?v=oovLgT2oId4&t=111s
