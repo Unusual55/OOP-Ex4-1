@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 
 /**
- * This function represent a pokemon. Each pokemon contain few fields of information:
+ * This class represent a pokemon. Each pokemon contain few fields of information:
  * 1. Value: How many points the pokemon worth
  * 2. X, Y: The position of the pokemon in 2D space.
  * 3, Type: The type of the pokemon, if Esrc<Edest, then the type is 1, otherwise the type will be -1

@@ -5,6 +5,10 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+/**
+ * This class represent a vertex in the graph, it extends node and have its own properties which represent
+ * the vertex location in a 3 dimensional space
+ */
 public class Vertex extends Node implements AbstractNode {
     private double x;
     private double y;

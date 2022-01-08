@@ -5,6 +5,9 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+/**
+ * This class contain the data about each node.
+ */
 public class Node implements AbstractNode {
     private int id = 0;
     private double value = 0.0;
