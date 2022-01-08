@@ -2,6 +2,8 @@ package api;
 
 import org.json.JSONObject;
 
+import java.util.Random;
+
 public interface AbstractNode extends Comparable<AbstractNode> {
     
     /**
@@ -29,7 +31,5 @@ public interface AbstractNode extends Comparable<AbstractNode> {
     /**
      * @return JSONObject representation of the node.
      */
-    default JSONObject toJSON() {
-        return new JSONObject().put("id", this.getID());
-    }
+    public JSONObject toJSON();
 }

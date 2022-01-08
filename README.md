@@ -20,7 +20,7 @@ Follow the steps in order to clone the project and install the required dependen
 
 2. This project uses and requires the [Google's serialization/deserialization library for JSON in Java called gson](https://github.com/google/gson):
 
-    Gradle:
+   Gradle:
 
     ```gradle
     dependencies {
@@ -28,7 +28,7 @@ Follow the steps in order to clone the project and install the required dependen
     }
     ```
 
-    Maven:
+   Maven:
 
     ```xml
     <dependency>
@@ -38,11 +38,11 @@ Follow the steps in order to clone the project and install the required dependen
     </dependency>
     ```
 
-    [Gson jar downloads](https://maven-badges.herokuapp.com/maven-central/com.google.code.gson/gson) are available from Maven Central.
-    
+   [Gson jar downloads](https://maven-badges.herokuapp.com/maven-central/com.google.code.gson/gson) are available from Maven Central.
+
 3. This project also uses and requires the library [JGraphT](https://jgrapht.org/):
 
-    Maven:
+   Maven:
 
     ```xml
     <dependency>
@@ -74,7 +74,7 @@ For more information and details about the structure and background of the proje
 
 ### Results
 
-These results ran on a laptop with the following CPU: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz, 2803 Mhz, 4 Core(s), 8 Logical Processor(s) 
+These results ran on a laptop with the following CPU: 11th Gen Intel(R) Core(TM) i7-1165G7 @ 2.80GHz, 2803 Mhz, 4 Core(s), 8 Logical Processor(s)
 
 case 0:
 ```json

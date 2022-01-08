@@ -1,142 +1,85 @@
-package datastructures;
+package test.datastructures;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
+import datastructures.Edge;
+import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import utils.Utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class EdgeTest {
-    
-    private static final int sampleSize = 20;
-    private static final long seed = 42069;
-    
-    @BeforeAll
-    static void setUp() {
-        Utils.setSeed(EdgeTest.seed);
-    }
-    
-    @Test
-    @Order(1)
-    void constructor() {
-        Edge edge;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge = new Edge(i, i + 1, v);
-            assertEquals(i, edge.getSource());
-            assertEquals(i + 1, edge.getDestination());
-            assertEquals(v, edge.getWeight(), 0.0001);
-            edge = new Edge(2 * i, i);
-            assertEquals(2 * i, edge.getSource());
-            assertEquals(i, edge.getDestination());
-            assertEquals(1.0, edge.getWeight(), 0.0001);
-        }
-        Edge edge2 = new Edge(sampleSize, sampleSize + 1, 0.123456789);
-        edge = new Edge(edge2);
-        assertEquals(sampleSize, edge.getSource());
-        assertEquals(sampleSize + 1, edge.getDestination());
-        assertEquals(0.123456789, edge.getWeight(), 0.0001);
-    }
-    
+
     @Test
     void getSource() {
-        Edge edge;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge = new Edge(i, i + 1, v);
-            assertEquals(i, edge.getSource());
-            edge = new Edge(2 * i, i);
-            assertEquals(2 * i, edge.getSource());
-        }
+        Edge e=new Edge(1, 2, 1d);
+        Assertions.assertEquals(1, e.getSource());
     }
-    
+
     @Test
     void getWeight() {
-        Edge edge;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge = new Edge(i, i + 1, v);
-            assertEquals(v, edge.getWeight(), 0.0001);
-            edge = new Edge(2 * i, i);
-            assertEquals(1.0, edge.getWeight(), 0.0001);
-        }
+        Edge e=new Edge(1, 2, 1d);
+        Assertions.assertEquals(1d, e.getWeight());
     }
-    
+
     @Test
     void getDestination() {
-        Edge edge;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge = new Edge(i, i + 1, v);
-            assertEquals(i + 1, edge.getDestination());
-            edge = new Edge(2 * i, i);
-            assertEquals(i, edge.getDestination());
-        }
+        Edge e=new Edge(1, 2, 1d);
+        Assertions.assertEquals(2, e.getDestination());
     }
-    
-    @Test
-    void getType() {
-        Edge edge;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge = new Edge(i, i + 1, v);
-            assertEquals(1, edge.getType());
-            edge = new Edge(2 * i, i);
-            assertEquals(-1, edge.getType());
-        }
-    }
-    
+
     @Test
     void setSource() {
-        Edge edge;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge = new Edge(i, i + 1, v);
-            assertEquals(i, edge.getSource());
-            edge.setSource(2 * i);
-            assertEquals(2 * i, edge.getSource());
-        }
+        Edge e=new Edge(1, 2, 1d);
+        e.setSource(3);
+        Assertions.assertEquals(3, e.getSource());
     }
-    
+
     @Test
     void setWeight() {
-        Edge edge;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge = new Edge(i, i + 1, v);
-            assertEquals(v, edge.getWeight(), 0.0001);
-            edge.setWeight(2 * v);
-            assertEquals(2 * v, edge.getWeight(), 0.0001);
-        }
+        Edge e=new Edge(1, 2, 1d);
+        e.setWeight(2d);
+        Assertions.assertEquals(2d, e.getWeight());
     }
-    
+
     @Test
     void setDestination() {
-        Edge edge;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge = new Edge(i, i + 1, v);
-            assertEquals(i + 1, edge.getDestination());
-            edge.setDestination(2 * i);
-            assertEquals(2 * i, edge.getDestination());
-        }
+        Edge e=new Edge(1, 2, 1d);
+        e.setDestination(3);
+        Assertions.assertEquals(3, e.getDestination());
     }
-    
+
+    @Test
+    void toJSON() {
+        Edge e=new Edge(1, 2, 1d);
+        Assertions.assertTrue(e.toJSON() instanceof JSONObject);
+        System.out.println(e.toJSON());
+    }
+
+    @Test
+    void compareTo() {
+    }
+
     @Test
     void testEquals() {
-        Edge edge1, edge2;
-        for (int i = 1; i <= sampleSize; i++) {
-            double v = i + ((double)i / ((double)sampleSize + 1));
-            edge1 = new Edge(i, i + 1, v);
-            edge2 = new Edge(i, i + 1, v);
-            assertEquals(edge1, edge2);
-            edge2 = new Edge(2 * i, i);
-            assertNotEquals(edge1, edge2);
-            edge2 = new Edge(i, 2 * i + 1, v);
-            assertNotEquals(edge1, edge2);
-            edge2 = new Edge(i, i + 1, 2 * v);
-            assertNotEquals(edge1, edge2);
-        }
+        Edge e1=new Edge(1, 2, 1d);
+        Edge e2=new Edge(2, 1, 3d);
+        Assertions.assertFalse(e1.equals(e2));
+        Assertions.assertFalse(e1.equals(13));
+        Edge e3=new Edge(1, 2, 1d);
+        Assertions.assertEquals(e1, e3);
+    }
+
+    @Test
+    void getType() {
+        Edge e1=new Edge(1, 2, 1d);
+        Edge e2=new Edge(2, 1, 3d);
+        Assertions.assertEquals(1, e1.getType());
+        Assertions.assertEquals(-1, e2.getType());
+    }
+
+    @Test
+    void testToString() {
+        Edge e1=new Edge(1, 2, 1d);
+        Assertions.assertEquals("(1, 2): 1.0", e1.toString());
     }
 }

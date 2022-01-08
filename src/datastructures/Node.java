@@ -5,6 +5,9 @@ import org.json.JSONObject;
 
 import java.util.Objects;
 
+/**
+ * This class contain the data about each node.
+ */
 public class Node implements AbstractNode {
     private int id = 0;
     private double value = 0.0;
@@ -69,6 +72,15 @@ public class Node implements AbstractNode {
         return this;
     }
     
+    /**
+     * @return JSONObject representation of the node.
+     */
+    @Override
+    public JSONObject toJSON() {
+        JSONObject json = new JSONObject();
+        json.put("id", this.id);
+        return json;
+    }
     
     /**
      * Compares this object with the specified object for order.  Returns a
@@ -111,14 +123,22 @@ public class Node implements AbstractNode {
         }
         return 0;
     }
-    
-    
-    
+
+
+    /**
+     * This function returns a string representation of the node
+     * @return String representation of the node
+     */
     @Override
     public String toString() {
         return '{' + "id=" + this.id + ", value=" + this.value + '}';
     }
-    
+
+    /**
+     * This function get an Object as input and check if its equal to this node
+     * @param o The input object
+     * @return True if they are equal, otherwise false
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,7 +146,11 @@ public class Node implements AbstractNode {
         Node O = (Node)o;
         return this.id == O.getID() && Double.compare(this.value, O.getValue()) == 0;
     }
-    
+
+    /**
+     * This function returns the hashed int of this node
+     * @return The hashed int of this nodes
+     */
     @Override
     public int hashCode() {
         return Objects.hash(this.id, this.value);
