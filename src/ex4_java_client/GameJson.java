@@ -7,6 +7,16 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * This function is the json parser of the client, therefore it will parse only the json string we get from
+ * the client:
+ * 1) Agents: Which gives us the current position of the agents and their speed which we need for
+ * our calculations in the pokemon allocation Algorithms
+ * 2) Pokemons: Which gives us the current pokemons, and where do we need to go in order to catch them and
+ * their type which used in order to decide if the pokemon is on (u,v) or (v,u)
+ * 3) Game Information: Which gives us the current player information like his score and the number of moves
+ * he made so far
+ */
 public class GameJson {
     private DWGraph graph;
     public GameJson(DWGraph g) {
@@ -65,6 +75,12 @@ public class GameJson {
         return pokelist;
     }
 
+    /**
+     * This function get a json string from the client and parse only the needed properties from it, the
+     * number of agents in the beginning of the game, the currents grade and the current number of moves
+     * @param infojson the string which contains the information about the game
+     * @return Array which contains the needed information
+     */
     public double[] JsonToInfo(String infojson){
         final JSONObject obj2 = new JSONObject(infojson).getJSONObject("GameServer");
         double agents=Double.parseDouble(String.valueOf(obj2.getDouble("agents")));

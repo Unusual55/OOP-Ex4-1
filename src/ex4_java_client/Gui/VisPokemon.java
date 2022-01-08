@@ -10,19 +10,13 @@ import ex4_java_client.Pokemon;
  * ones. As we all know... Gotta catch'em all!
  */
 public class VisPokemon extends Pokemon {
-    private String Path;
+    private final String Path;
 
-//    public VisPokemon(String path, double x, double y, int type, double value){
-//        super(x,y,value,type);
-//        this.Path="Media/sprites/"+path;
-//    }
-
-    public VisPokemon(String path, Pokemon p){
+    public VisPokemon(String path, Pokemon p) {
         super(p);
-        if(p.type()==1) {
+        if (p.type() == 1) {
             this.Path = "Media/sprites/" + path;
-        }
-        else{
+        } else {
             this.Path = "Media/sprites/shiny/" + path;
         }
     }
@@ -31,7 +25,7 @@ public class VisPokemon extends Pokemon {
      * This function mark this pokemon as drawn so we will know we don't need to draw it again until we catch it.
      */
 
-    public String getPath(){
+    public String getPath() {
         return this.Path;
     }
 }

@@ -248,7 +248,6 @@ public class GraphDisplay extends JPanel implements MouseListener {
             }
             final double nW = this.width / scale, nH = this.height / scale;
             g2d.drawImage(image, (int) (coor[0] - nW / 2), (int) (coor[1] - nH / 2), (int) nW, (int) nH, this);
-//            g2d.drawImage(image, (int) coor[0] - ((int) image.getWidth() / 10), (int) coor[1] - (int) (image.getHeight() / 10), this.width / 10, this.height / 10, this);
         }
     }
 
@@ -269,7 +268,6 @@ public class GraphDisplay extends JPanel implements MouseListener {
     /**
      * This function gets an integer input which represents the remaining time for the simulation, set it as the
      * time and redraw it.
-     *
      * @param newTime
      */
     public void updateTime(int newTime) {
@@ -277,6 +275,11 @@ public class GraphDisplay extends JPanel implements MouseListener {
         repaint();
     }
 
+    /**
+     * This function gets an integer input which represents the moves we already made since we started
+     * the simulation, set it as the current move number and redraw it.
+     * @param moves
+     */
     public void updateMoves(int moves) {
         this.moves = moves;
         repaint();
@@ -294,6 +297,9 @@ public class GraphDisplay extends JPanel implements MouseListener {
         g2d.drawString("Moves: " + moves, x, y);
     }
 
+    /**
+     * This function set the coordinates of the stop button rectangle
+     */
     public void setStopCoordinates() {
         float x1 = (float) ((32. / 40.) * (this.width));
         float y1 = (float) ((17. / 20.) * (this.height));
@@ -452,12 +458,6 @@ public class GraphDisplay extends JPanel implements MouseListener {
      * @return
      */
     public double[] CoordinatesTransformation(double x, double y) {
-//        final double marginX = 0;
-//        final double marginY = 0;
-//        final double slopeX = (this.width - marginX)/(this.BoundingBox[2] - this.BoundingBox[0]);
-//        final double slopeY = (this.height - marginY)/(this.BoundingBox[3] - this.BoundingBox[1]);
-//        double xfixed =  marginX + slopeX * (x - this.BoundingBox[0]);
-//        double yfixed =  marginY + slopeY * (y - this.BoundingBox[1]);
         double dpx = this.BoundingBox[2] - this.BoundingBox[0];
         double dpy = this.BoundingBox[3] - this.BoundingBox[1];
         double dcx = this.BoundingBox[2] - x;
@@ -466,16 +466,6 @@ public class GraphDisplay extends JPanel implements MouseListener {
         double yfixed = (dcy / dpy * this.height * 0.8);
         return new double[]{xfixed + 20, yfixed + 20};
     }
-//
-//    public double[] CoordinatesTransformation(double x, double y, Image image) {
-//        double dpx = this.BoundingBox[2] - this.BoundingBox[0];
-//        double dpy = this.BoundingBox[3] - this.BoundingBox[1];
-//        double dcx = this.BoundingBox[2] - x;
-//        double dcy = this.BoundingBox[3] - y;
-//        double xfixed = (dcx / dpx * this.width * 0.8 - (image.getWidth(this) / 2));
-//        double yfixed = (dcy / dpy * this.height * 0.8 - image.getHeight(this) / 2);
-//        return new double[]{xfixed, yfixed};
-//    }
 
     /**
      * This static function plays the first opening song of pokemon in the background
@@ -490,17 +480,7 @@ public class GraphDisplay extends JPanel implements MouseListener {
         AudioInputStream ais = AudioSystem.getAudioInputStream(f);
         clip.open(ais);
         clip.start();
-//        SwingUtilities.invokeLater(() -> {
-//            JOptionPane.showMessageDialog(null, "Close on exit!");
-//        });
     }
-
-//    public static void music2() throws LineUnavailableException, UnsupportedAudioFileException, IOException {
-//        Clip clip = AudioSystem.getClip();
-//        File f = new File("Media/op1.wav");
-//        AudioInputStream ais = AudioSystem.getAudioInputStream(f);
-//        clip.open(ais);
-//    }
 
     /**
      * This function get the current active pokemon, and recreate the pokemon map so it will match the input set
@@ -539,6 +519,12 @@ public class GraphDisplay extends JPanel implements MouseListener {
         }
     }
 
+    /**
+     * This function is the event that stops the client if the "stop" button was clicked.
+     * If the mouse is clicked inside the rectangle, we will stop the client, otherwise the function won't
+     * do anything
+     * @param e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         Polygon p = new Polygon();

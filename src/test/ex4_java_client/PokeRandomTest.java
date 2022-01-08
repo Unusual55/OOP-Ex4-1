@@ -1,4 +1,4 @@
-package test;
+package test.ex4_java_client;
 
 import ex4_java_client.Gui.PokeRandom;
 import org.junit.jupiter.api.Test;

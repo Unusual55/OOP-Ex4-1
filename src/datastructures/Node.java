@@ -120,14 +120,22 @@ public class Node implements AbstractNode {
         }
         return 0;
     }
-    
-    
-    
+
+
+    /**
+     * This function returns a string representation of the node
+     * @return String representation of the node
+     */
     @Override
     public String toString() {
         return '{' + "id=" + this.id + ", value=" + this.value + '}';
     }
-    
+
+    /**
+     * This function get an Object as input and check if its equal to this node
+     * @param o The input object
+     * @return True if they are equal, otherwise false
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -135,7 +143,11 @@ public class Node implements AbstractNode {
         Node O = (Node)o;
         return this.id == O.getID() && Double.compare(this.value, O.getValue()) == 0;
     }
-    
+
+    /**
+     * This function returns the hashed int of this node
+     * @return The hashed int of this nodes
+     */
     @Override
     public int hashCode() {
         return Objects.hash(this.id, this.value);

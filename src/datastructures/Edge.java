@@ -132,13 +132,25 @@ public class Edge implements AbstractEdge {
         return "("+src+", "+dest+"): "+weight;
     }
 
+    /**
+     * This function return the value of the edge
+     * @return
+     */
     public double getValue(){
         return this.value;
     }
 
+    /**
+     * This function update the value of the edge
+     * @param extra
+     */
     public void updateValue(double extra){
         this.value+=extra;
     }
+
+    /**
+     * This function reset the value of the edge to 0
+     */
     public void resetValue(){
         this.value=0;
     }

@@ -5,6 +5,12 @@ import org.jgrapht.graph.SimpleDirectedWeightedGraph;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * This class represent graph data structure- G=(V,E) G- graph object, V- vertices, E- edges
+ * We used JGraphT SimpleDirectedWeighted graph as the graph, and kept the Vertices data in different
+ * HashMap.
+ */
+
 public class DWGraph{
     public SimpleDirectedWeightedGraph<Integer, Edge> graph;
     public HashMap<Integer, Vertex> nodes;
@@ -18,6 +24,11 @@ public class DWGraph{
         this.nodes=g.nodes;
     }
 
+    /**
+     * This function returns the node whom its key is the input key
+     * @param key The id of the node
+     * @return The wanted vertex, otherwise null
+     */
     public Vertex getNode(int key){
         if(!this.nodes.containsKey(key)){
             return null;
@@ -25,6 +36,12 @@ public class DWGraph{
         return nodes.get(key);
     }
 
+    /**
+     * This function returns the edge (src,dest)
+     * @param src The source of the edge
+     * @param dest The destination of the edge
+     * @return The wanted edge, otherwise null
+     */
     public Edge getEdge(int src, int dest){
         if(!this.nodes.containsKey(src)||!this.nodes.containsKey(dest)||!this.graph.containsEdge(src, dest)){
             return null;
@@ -32,6 +49,11 @@ public class DWGraph{
         return this.graph.getEdge(src, dest);
     }
 
+    /**
+     * This fucntion add new vertex to the graph
+     * @param v The new vertex
+     * @return True if the vertex added successfully, otherwise false
+     */
     public boolean addNode(Vertex v){
         int id=v.getID();
         if(this.nodes.containsKey(id)||id<0){
@@ -42,6 +64,13 @@ public class DWGraph{
         return true;
     }
 
+    /**
+     * This function add new edge to the graph
+     * @param src The source of the edge
+     * @param dest The destination of the edge
+     * @param weight The weight of the edge
+     * @return True if the edge added successfully, otherwise false
+     */
     public boolean addEdge(int src, int dest, double weight){
         if(!this.nodes.containsKey(src)||!this.nodes.containsKey(dest)||weight<=0){
             return false;
@@ -50,6 +79,11 @@ public class DWGraph{
         return true;
     }
 
+    /**
+     * This function remove a node from the graph
+     * @param key The id of the node
+     * @return True if the node successfully removed, otherwise false
+     */
     public boolean removeNode(int key){
         if(!this.nodes.containsKey(key)){
             return false;
@@ -59,6 +93,12 @@ public class DWGraph{
         return true;
     }
 
+    /**
+     * This function remove an edge from the graph
+     * @param src The id of the source node
+     * @param dest The id of the destination node
+     * @return True if the edge successfully removed, otherwise false
+     */
     public boolean removeEdge(int src, int dest){
         if(!nodes.containsKey(src)||!nodes.containsKey(dest)||!graph.containsEdge(src, dest)){
             return false;
@@ -75,6 +115,12 @@ public class DWGraph{
         return this.graph.edgeSet();
     }
 
+    /**
+     * This function calculates on which edge the pokemon was appeared, and after it found, it updates
+     * it's value
+     * @param p The pokemon
+     * @return Array which contains the source and the destination of the edge.
+     */
     public int[] findWantedEdge(Pokemon p){
         final double EPS=0.00000001;
         Set<Edge> edges=this.graph.edgeSet();
@@ -114,6 +160,9 @@ public class DWGraph{
         return new int[]{-1};//if we didn't find any edge
     }
 
+    /**
+     * This function reset the values of all of the edges
+     */
     public void resetEdgesValues(){
         for(Edge e:this.graph.edgeSet()){
             e.resetValue();

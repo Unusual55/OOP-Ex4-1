@@ -1,4 +1,4 @@
-package test;
+package test.ex4_java_client;
 import datastructures.DWGraph;
 import datastructures.GraphAlgo;
 import ex4_java_client.GameJson;

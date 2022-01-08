@@ -5,6 +5,10 @@ import datastructures.DijkstreeData;
 
 import java.util.*;
 
+/**
+ * This class is runs the allocation algorithms which allocate each agent target and control the agents
+ * cooperation
+ */
 public class AllocationAlgorithm {
     private HashMap<Integer, AgentV1> agents;
     private HashMap<String, Pokemon> pokemons;
@@ -29,6 +33,11 @@ public class AllocationAlgorithm {
         }
     }
 
+    /**
+     * This function updates the current agents and pokemons
+     * @param agents The
+     * @param pokemon
+     */
     public void update(HashMap<Integer, AgentV1> agents, HashSet<Pokemon> pokemon) {
         HashMap<String, Pokemon> pokemons = new HashMap<>();
         SPEED=new HashSet<>();
@@ -63,24 +72,34 @@ public class AllocationAlgorithm {
         this.pokemons = ret;
     }
 
+    /**
+     * This function runs the allocation algorithms of the agents.
+     * @return HashMap of the agent's current situation
+     */
     public HashMap<Integer, AgentV1> AllocatePokemons() {
-        if(SPEED.size()==1){
-            System.out.println("speed: " + SPEED);
-        }
-        HashSet<Integer> realloc = new HashSet<>();
+        /**
+         * Create new HashMap which will be used to save the information about the alloctaions
+         */
         HashMap<String, AgentV1> allocated = new HashMap<>();
         HashSet<AgentV1> alloc = new HashSet<>();
         for (AgentV1 a : this.agents.values()) {
             Pokemon banned = null;
+            /**
+             * In any case the agent is not available, which means he's on an edge, don't change his target
+             */
             if (!a.isAvailable()) {
                 continue;
             }
+            /**
+             * In any case it took more than the estimated time to catch the target pokemon, remove the target
+             * and mark it so the allocation algorithms won't allocate it in the next during this function
+             */
             if (System.currentTimeMillis() > a.getCatchTime() && a.getCatchTime() != -1) {
                 banned = a.getTarget();
                 a.removeTarget();
-                if(agents.size()==1&&banned!=null){
-                    this.pokemons.remove(banned.toString());
-                }
+//                if(agents.size()==1&&banned!=null){
+//                    this.pokemons.remove(banned.toString());
+//                }
             }
             int agentid = a.getId();
             String pokemonstr = " ";
@@ -89,41 +108,47 @@ public class AllocationAlgorithm {
             list.addAll(this.pokemons.values().stream().toList());
             for (Pokemon p : list) {
 
+                //In any case the pokemon is the banned pokemon of this agent, skip to the next iteration
+
                 if (banned != null && banned == p) {
                     continue;
                 }
 
-                int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc(), id = a.getId();
-
+                int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc();
+                //In any case the pokemon already been assigned and switch from this agent to another,
+                //skip to the next iteration
                 if (pokemons.size() <= agents.size()&&agents.size()>1&&a.getTarget()!=null) {
-                    if (a.getTarget()!=p&&p.containsPastAllocation(a.getId())) {
+                    if (a.getTarget()!=p&&p.containsPastAllocation(agentid)) {
                         continue;
                     }
                 }
+                //In any case the pokemon is the agent's target, skip to the next iteration
                 if (a.getTarget() == p) {
                     allocated.put(p.toString(), a);
                 }
-
+                //In any case the pokemon is the closest pokemon to this agent, keep its distance from the agent
+                //and keep his String identifier.
                 double dist = (data.get(agentpos).distance.get(src) + this.graph.getEdge(src, dest).getWeight()) / speed;
                 if (dist < mindist) {
                     mindist = dist;
                     pokemonstr = p.toString();
                 }
             }
-
+            //In any case no pokemon was selected for the agent, skip to the next iteration
             if(pokemonstr==" "){
                 continue;
             }
 
             Pokemon p = this.pokemons.get(pokemonstr);
             if (this.agents.size() > 1) {
+                //If the pokemon is a target of another agent, check who is the best agent to assign for the task
                 if (allocated.containsKey(p.toString())) {
                     int betterAgent = this.getBetterAgent(allocated.get(p.toString()), a, p);
-
+                    //If the current agent is the better one
                     if (betterAgent == allocated.get(p.toString()).getId()){
                         continue;
                     }
-
+                    //If the other agent is better, switch between the current and other agents targets
                     a.removeTarget();
                     if (this.agents.get(betterAgent).getTarget() != null) {
                         Pokemon t = this.agents.get(betterAgent).getTarget();
@@ -147,9 +172,11 @@ public class AllocationAlgorithm {
                     a = this.agents.get(betterAgent);
                 }
             }
+            //If the best pokemon to assign is the current target, skip to the next iteration
             if(a.getTarget()==p){
                 continue;
             }
+            //Set the new target for the agent
             a.setTarget(p);
             int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc();
             LinkedList<Integer> l = data.get(agentpos).getPath(agentpos, src);
@@ -162,11 +189,16 @@ public class AllocationAlgorithm {
             allocated.put(p.toString(), a);
             p.addPastAllocation(a.getId());
             a.advanceNextMove();
-//            this.pokemons.remove(p.toString());
         }
         return this.agents;
     }
 
+    /**
+     * This function return a string which contain the next move of an agent in the valid format in order
+     * to send it as update to the client
+     * @param id The id of the agent
+     * @return The agent's next move
+     */
     public String AgentNextMove(int id) {
         AgentV1 a = this.agents.get(id);
         int next = a.getNextMove();
@@ -174,21 +206,13 @@ public class AllocationAlgorithm {
         return "{\"agent_id\":" + id + ", \"next_node_id\": " + next + "}";
     }
 
-    public boolean checkifStuck(int id) {
-        AgentV1 a = this.agents.get(id);
-        LinkedList<Integer> log = this.agentslog.get(id);
-        final int size = log.size();
-        if (size < 6) {
-            return false;
-        }
-        int a1 = log.get(size - 4), b = log.get(size - 3), c = log.get(size - 2), d = log.get(size - 1);
-        int e = log.get(size - 5), f = log.get(size - 6);
-        if (a1 == c && a1 == f && b == d && b == e) {
-            return true;
-        }
-        return false;
-    }
-
+    /**
+     * This function get 2 agents and a pokemon and returns the id of the faster agent to reach the pokemon
+     * @param agent1 The first agent
+     * @param agent2 The second agent
+     * @param p The pokemon
+     * @return The id of the better agent
+     */
     public int getBetterAgent(AgentV1 agent1, AgentV1 agent2, Pokemon p) {
         int src1 = agent1.getSrc(), src2 = agent2.getSrc();
         if(agent1.getDest()!=-1){

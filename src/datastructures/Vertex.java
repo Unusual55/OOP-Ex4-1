@@ -273,18 +273,31 @@ public class Vertex extends Node implements AbstractNode {
     public double distance() {
         return this.distance(0, 0, 0);
     }
-    
+
+    /**
+     * This function return a json object which contains this vertex data
+     * @return
+     */
     public JSONObject toJSON() {
         JSONObject json = super.toJSON();
         json.put("pos", this.getXYZString());
         return json;
     }
-    
+
+    /**
+     * This fucntion returns a string representation of this vertex
+     * @return
+     */
     @Override
     public String toString() {
         return '{' + "id=" + this.getID() + ", value=" + this.getValue() + ", pos=" + this.getXYZString() + '}';
     }
-    
+
+    /**
+     * This function get an object as input and check if its properties are equal to this vertex properties
+     * @param o The input object
+     * @return True if they are equal, otherwise false
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -295,7 +308,11 @@ public class Vertex extends Node implements AbstractNode {
                 Double.compare(this.getY(), v.getY()) == 0 &&
                 Double.compare(this.getZ(), v.getZ()) == 0;
     }
-    
+
+    /**
+     * This fucntion returns the hashed int of this vertex
+     * @return The hashed int of this vertex
+     */
     @Override
     public int hashCode() {
         return Objects.hash(this.getID(), this.getValue(), this.getX(), this.getY(), this.getZ());

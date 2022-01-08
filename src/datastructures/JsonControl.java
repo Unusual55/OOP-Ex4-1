@@ -10,25 +10,34 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
 
+/**
+ * This class is a support class which we use in order to load the graph from json or string json
+ */
 public class JsonControl {
     public DWGraph g;
-    public void load(String file){
-        GsonBuilder builder=new GsonBuilder()
+
+    /**
+     * This function get a string which represent a file path, and load it as a graph
+     *
+     * @param file Path to the file
+     */
+    public void load(String file) {
+        GsonBuilder builder = new GsonBuilder()
                 .registerTypeAdapter(Edge.class, new EdgeAdapter())
                 .registerTypeAdapter(Vertex.class, new NodeAdapter())
                 .setPrettyPrinting();
-        Gson g=builder.create();
+        Gson g = builder.create();
         try {
             FileReader reader = new FileReader(file);
             Pair<HashMap<Integer, Vertex>, HashMap<Integer, HashMap<Integer, Edge>>> p = GraphAdapter.toGraph(g.fromJson(reader, GraphAdapter.class));
-            this.g= new DWGraph();
-            for(Vertex v: p.getFirst().values()){
+            this.g = new DWGraph();
+            for (Vertex v : p.getFirst().values()) {
                 this.g.addNode(v);
             }
-            for (Vertex v: p.getFirst().values()){
+            for (Vertex v : p.getFirst().values()) {
                 HashMap<Integer, Edge> edges = p.getSecond().get(v.getID());
-                int src=v.getID();
-                for(int dest: edges.keySet()){
+                int src = v.getID();
+                for (int dest : edges.keySet()) {
                     this.g.addEdge(src, dest, edges.get(dest).getWeight());
                 }
             }
@@ -37,31 +46,36 @@ public class JsonControl {
         }
     }
 
-    public void loadGraphJson(String graphStr){
-        GsonBuilder builder=new GsonBuilder()
+    /**
+     * This function get a graph string, turn it to JSONSTRING and parse it into a DWGraph object
+     *
+     * @param graphStr The string of the graph
+     */
+    public void loadGraphJson(String graphStr) {
+        GsonBuilder builder = new GsonBuilder()
                 .registerTypeAdapter(Edge.class, new EdgeAdapter())
                 .registerTypeAdapter(Vertex.class, new NodeAdapter())
                 .setPrettyPrinting();
-        Gson g=builder.create();
-        JSONObject jsonArray=new JSONObject(graphStr);
-        JSONArray nodes=jsonArray.getJSONArray("Nodes");
-        JSONArray edges=jsonArray.getJSONArray("Edges");
-        this.g=new DWGraph();
-        for(int i=0; i<nodes.length();i++){
-            JSONObject obj=nodes.getJSONObject(i);
-            int id=obj.getInt("id");
-            String pos=obj.getString("pos");
-            String[] position=pos.split(",");
-            double x=Double.parseDouble(position[0]);
-            double y=Double.parseDouble(position[1]);
-            Vertex v=new Vertex(id,0d,x,y,0d);
+        Gson g = builder.create();
+        JSONObject jsonArray = new JSONObject(graphStr);
+        JSONArray nodes = jsonArray.getJSONArray("Nodes");
+        JSONArray edges = jsonArray.getJSONArray("Edges");
+        this.g = new DWGraph();
+        for (int i = 0; i < nodes.length(); i++) {
+            JSONObject obj = nodes.getJSONObject(i);
+            int id = obj.getInt("id");
+            String pos = obj.getString("pos");
+            String[] position = pos.split(",");
+            double x = Double.parseDouble(position[0]);
+            double y = Double.parseDouble(position[1]);
+            Vertex v = new Vertex(id, 0d, x, y, 0d);
             this.g.addNode(v);
         }
-        for(int i=0; i<edges.length();i++){
-            JSONObject obj=edges.getJSONObject(i);
-            int src=obj.getInt("src");
-            int dest=obj.getInt("dest");
-            double weight=obj.getDouble("w");
+        for (int i = 0; i < edges.length(); i++) {
+            JSONObject obj = edges.getJSONObject(i);
+            int src = obj.getInt("src");
+            int dest = obj.getInt("dest");
+            double weight = obj.getDouble("w");
             this.g.addEdge(src, dest, weight);
         }
     }
