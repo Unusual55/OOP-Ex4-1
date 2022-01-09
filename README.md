@@ -134,6 +134,25 @@ case 15:
 ```json
 {"GameServer":{"pokemons":4,"is_logged_in":false,"moves":588,"grade":375,"game_level":15,"max_user_level":-1,"id":0,"graph":"data/A3","agents":1}}
 ```
+| Case | Moves | Grade |
+|------|-------|-------|
+| 0    | 292   | 147   |
+| 1    | 585   | 543   |
+| 2    | 292   | 275   |
+| 3    | 581   | 932   |
+| 4    | 291   | 262   |
+| 5    | 589   | 851   |
+| 6    | 293   | 79    |
+| 7    | 588   | 396   |
+| 8    | 292   | 130   |
+| 9    | 587   | 516   |
+| 10   | 292   | 210   |
+| 11   | 587   | 1768  |
+| 12   | 292   | 40    |
+| 13   | 581   | 363   |
+| 14   | 291   | 246   |
+| 15   | 588   | 375   |
+
 <center>
 <img src="https://github.com/SassonNir/OOP-Ex4/blob/main/396a880f-e5c0-48d0-8ee4-b6c822913fae.gif" width="480" height="400" class="centerImage" text="Authorede by Ofri Tavor and Nir Sasson">
 </center>
