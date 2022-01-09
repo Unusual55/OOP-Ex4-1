@@ -80,6 +80,12 @@ public class AllocationAlgorithm {
          * Create new HashMap which will be used to save the information about the alloctaions
          */
         HashMap<String, AgentV1> allocated = new HashMap<>();
+        for(AgentV1 a:this.agents.values()){
+            if(a.getTarget()==null){
+                continue;
+            }
+            allocated.put(a.getTarget().toString(), a);
+        }
         HashSet<AgentV1> alloc = new HashSet<>();
         for (AgentV1 a : this.agents.values()) {
             Pokemon banned = null;
@@ -111,6 +117,13 @@ public class AllocationAlgorithm {
 
                 if (banned != null && banned == p) {
                     continue;
+                }
+
+                if(allocated.containsKey(p.toString())){
+                    AgentV1 curr=allocated.get(p.toString());
+                    if(getBetterAgent(curr, a, p)!=a.getId()){
+                        continue;
+                    }
                 }
 
                 int src = p.getEsrc(), dest = p.getEdest(), agentpos = a.getSrc();
