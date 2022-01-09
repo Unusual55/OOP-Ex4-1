@@ -63,7 +63,7 @@ java -jar ./Ex4_Server_v0.0.jar [CASE_NUMBER 0-15]
 In order to run the simulation, enter the following command to different terminal
 
 ```bash
-java -jar ./OOP-Ex4.jar [CASE_NUMBER 0-15]
+java -jar ./OOP-Ex4.jar
 ```
 
 Which will open and load the specified case into the GUI.
@@ -122,7 +122,7 @@ case 10:
 ```
 case 11:
 ```json
-{"GameServer":{"pokemons":6,"is_logged_in":false,"moves":587,"grade":1768,"game_level":11,"max_user_level":-1,"id":0,"graph":"data/A2","agents":3}}
+{"GameServer":{"pokemons":6,"is_logged_in":false,"moves":581,"grade":2248,"game_level":11,"max_user_level":-1,"id":0,"graph":"data/A2","agents":3}}
 ```
 case 12:
 ```json
@@ -130,11 +130,11 @@ case 12:
 ```
 case 13:
 ```json
-{"GameServer":{"pokemons":2,"is_logged_in":false,"moves":581,"grade":363,"game_level":13,"max_user_level":-1,"id":0,"graph":"data/A3","agents":2}}
+{"GameServer":{"pokemons":2,"is_logged_in":false,"moves":586,"grade":387,"game_level":13,"max_user_level":-1,"id":0,"graph":"data/A3","agents":2}}
 ```
 case 14:
 ```json
-{"GameServer":{"pokemons":3,"is_logged_in":false,"moves":291,"grade":246,"game_level":14,"max_user_level":-1,"id":0,"graph":"data/A3","agents":3}}
+{"GameServer":{"pokemons":3,"is_logged_in":false,"moves":290,"grade":286,"game_level":14,"max_user_level":-1,"id":0,"graph":"data/A3","agents":3}}
 ```
 case 15:
 ```json
@@ -153,10 +153,10 @@ case 15:
 | 8    | 292   | 130   |
 | 9    | 587   | 516   |
 | 10   | 292   | 210   |
-| 11   | 587   | 1768  |
+| 11   | 581   | 2248  |
 | 12   | 292   | 40    |
-| 13   | 581   | 363   |
-| 14   | 291   | 246   |
+| 13   | 586   | 387   |
+| 14   | 290   | 286   |
 | 15   | 588   | 375   |
 
 <center>
