@@ -54,16 +54,10 @@ Follow the steps in order to clone the project and install the required dependen
 
 ### Usage
 
-In order to run the server run the following command into the terminal:
+In order to run the simulation, enter the following command to your terminal
 
 ```bash
-java -jar ./path/to/jar/Ex4_Server_v0.0.jar [CASE_NUMBER 0-15]
-```
-
-And in order to run the graphical interface in a seprate terminal run run the command:
-
-```bash
-java -jar ./path/to/jar/Ex4.jar
+java -jar ./OOP-Ex4.jar [CASE_NUMBER 0-15]
 ```
 
 Which will open and load the specified case into the GUI.
