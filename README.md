@@ -84,7 +84,7 @@ case 2:
 ```
 case 3:
 ```json
-{"GameServer":{"pokemons":4,"is_logged_in":false,"moves":586,"grade":911,"game_level":3,"max_user_level":-1,"id":0,"graph":"data/A0","agents":1}}
+{"GameServer":{"pokemons":4,"is_logged_in":false,"moves":581,"grade":932,"game_level":3,"max_user_level":-1,"id":0,"graph":"data/A0","agents":1}}
 ```
 case 4:
 ```json
